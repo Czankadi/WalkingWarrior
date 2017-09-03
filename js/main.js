@@ -10,7 +10,7 @@ Main.prototype = {
 
 		me.game.stage.backgroundColor = "34495f";
 
-		//Declare assets that will be used as tiles
+		
 		me.tileTypes = [
 			'1', //blue
 			'2',//green
@@ -23,25 +23,24 @@ Main.prototype = {
 			
 		];
 
-		//Keep track of the users score
+		
 		me.score = 0;
 
-		//Keep track of the tiles the user is trying to swap (if any)
+		
 		me.activeTile1 = null;
 		me.activeTile2 = null;
 
-		//Controls whether the player can make a move or not
+		
 		me.canMove = false;
 
-		//Grab the weigh and height of the tiles (assumes same size for all tiles)
-		me.tileWidth =200 //me.game.cache.getImage('1').width;
-		me.tileHeight =200 //me.game.cache.getImage('1').height;
+		
+		me.tileWidth =200 
+		me.tileHeight =200 
 
-		//This will hold all of the tile sprites
+		
 		me.tiles = me.game.add.group();
 
-		//Initialise tile grid, this array will hold the positions of the tiles
-		//Create whatever shape you'd like
+		
 		me.tileGrid = [
 			[null, null, null, null,  null],
 			[null, null, null, null,  null],
@@ -51,11 +50,11 @@ Main.prototype = {
 			
 		];
 
-		//Create a random data generator to use later
+		
 		var seed = Date.now();
 		me.random = new Phaser.RandomDataGenerator([seed]);
                            
-		//Set up some initial tiles and the score label
+		
 		me.initTiles();
 		me.createScore();
 
@@ -65,39 +64,37 @@ Main.prototype = {
 
 		var me = this;
 
-		//The user is currently dragging from a tile, so let's see if they have dragged
-		//over the top of an adjacent tile
+		
 		if(me.activeTile1 && !me.activeTile2){
 
-			//Get the location of where the pointer is currently
+			
 			var hoverX = me.game.input.x;
 			var hoverY = me.game.input.y;
 
-			//Figure out what position on the grid that translates to
+			
 			var hoverPosX = Math.floor(hoverX/me.tileWidth);
 			var hoverPosY = Math.floor(hoverY/me.tileHeight);
 
-			//See if the user had dragged over to another position on the grid
+			
 			var difX = (hoverPosX - me.startPosX);
 			var difY = (hoverPosY - me.startPosY);
 
-			//Make sure we are within the bounds of the grid
+			
 			if(!(hoverPosY > me.tileGrid[0].length - 1 || hoverPosY < 0) && !(hoverPosX > me.tileGrid.length - 1 || hoverPosX < 0)){
 
-				//If the user has dragged an entire tiles width or height in the x or y direction
-				//trigger a tile swap
+				
 				if((Math.abs(difY) == 1 && difX == 0) || (Math.abs(difX) == 1 && difY ==0)){
 
-					//Prevent the player from making more moves whilst checking is in progress
+					
 					me.canMove = false;
 
-					//Set the second active tile (the one where the user dragged to)
+					
 					me.activeTile2 = me.tileGrid[hoverPosX][hoverPosY];
 
-					//Swap the two active tiles
+					
 					me.swapTiles();
 
-					//After the swap has occurred, check the grid for any matches
+					
 					me.game.time.events.add(300, function(){
 						me.checkMatch();
 					});
@@ -109,7 +106,7 @@ Main.prototype = {
 
 	},
 
-	//We don't actuall use this function, but it can trigger the game over state
+	
 	gameOver: function(){
 		this.game.state.start('GameOver');
 	},
@@ -118,25 +115,25 @@ Main.prototype = {
 
 		var me = this;
 
-		//Loop through each column in the grid
+		
                 console.log(me.tileGrid.length);
                 console.log(me.tileGrid[1].length);
                 console.log("me.tileGrid.length");
 		for(var i = 0; i < me.tileGrid.length; i++){
 
-			//Loop through each position in a specific column, starting from the top
+			
 			for(var j = 0; j < me.tileGrid.length; j++){
 
-				//Add the tile to the game at this grid position
+				
 				var tile = me.addTile(i, j,0);
 
-				//Keep a track of the tiles position in our tileGrid
+				
 				me.tileGrid[i][j] = tile;
 
 			}
 		}
 
-		//Once the tiles are ready, check for any matches on the grid
+		
 		me.game.time.events.add(300, function(){
 			me.checkMatch();
 		});
@@ -147,7 +144,7 @@ Main.prototype = {
 
 		var me = this;
 
-		//Choose a random tile to add
+		
 		if (type ==0){
 		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 5)];	
 		}
@@ -165,22 +162,22 @@ Main.prototype = {
 		}
 		
 		
-		//Add the tile at the correct x position, but add it to the top of the game (so we can slide it in)
+		
 		var tile = me.tiles.create((x * me.tileWidth) + me.tileWidth / 2, 0, tileToAdd);
 
-		//Animate the tile into the correct vertical position
+		
 		me.game.add.tween(tile).to({y:y*me.tileHeight+(me.tileHeight/2)}, 300, Phaser.Easing.Linear.In, true)
 
-		//Set the tiles anchor point to the center
+
 		tile.anchor.setTo(0.5, 0.5);
 
-		//Enable input on the tile
+		
 		tile.inputEnabled = true;
 
-		//Keep track of the type of tile that was added
+		
 		tile.tileType = tileToAdd;
 
-		//Trigger the tileDown function whenever the user clicks or taps on this tile
+		
 		tile.events.onInputDown.add(me.tileDown, me);
 
 		return tile;
@@ -191,7 +188,7 @@ Main.prototype = {
 
 		var me = this;
 
-		//Keep track of where the user originally clicked
+		
 		if(me.canMove){
 			me.activeTile1 = tile;
 
@@ -203,7 +200,7 @@ Main.prototype = {
 
 	tileUp: function(){
 
-		//Reset the active tiles
+		
 		var me = this;
 		me.activeTile1 = null;
 		me.activeTile2 = null;
@@ -214,17 +211,17 @@ Main.prototype = {
 
 		var me = this;
 
-		//If there are two active tiles, swap their positions
+		
 		if(me.activeTile1 && me.activeTile2){
 
 			var tile1Pos = {x:(me.activeTile1.x - me.tileWidth / 2) / me.tileWidth, y:(me.activeTile1.y - me.tileHeight / 2) / me.tileHeight};
 			var tile2Pos = {x:(me.activeTile2.x - me.tileWidth / 2) / me.tileWidth, y:(me.activeTile2.y - me.tileHeight / 2) / me.tileHeight};
 
-			//Swap them in our "theoretical" grid
+			
 			me.tileGrid[tile1Pos.x][tile1Pos.y] = me.activeTile2;
 			me.tileGrid[tile2Pos.x][tile2Pos.y] = me.activeTile1;
 
-			//Actually move them on the screen
+			
 			me.game.add.tween(me.activeTile1).to({x:tile2Pos.x * me.tileWidth + (me.tileWidth/2), y:tile2Pos.y * me.tileHeight + (me.tileHeight/2)}, 100, Phaser.Easing.Linear.In, true);
 			me.game.add.tween(me.activeTile2).to({x:tile1Pos.x * me.tileWidth + (me.tileWidth/2), y:tile1Pos.y * me.tileHeight + (me.tileHeight/2)}, 100, Phaser.Easing.Linear.In, true);
 
@@ -239,31 +236,30 @@ Main.prototype = {
 
 		var me = this;
 
-		//Call the getMatches function to check for spots where there is
-		//a run of three or more tiles in a row
+		
 		var matches = me.getMatches(me.tileGrid);
                 console.log(matches);
                 if(matches.length > 0){
                 console.log(matches[0].length);
                 }
-		//If there are matches, remove them
+		
 		if(matches.length > 0){
 
-			//Remove the tiles
+			
 			me.removeTileGroup(matches);
 
-			//Move the tiles currently on the board into their new positions
+			
 			me.resetTile();
 			
-			//Fill the board with new tiles wherever there is an empty spot
+			
 			me.fillTile(matches.length);
 
-			//Trigger the tileUp event to reset the active tiles
+			
 			me.game.time.events.add(300, function(){
 				me.tileUp();
 			});
 
-			//Check again to see if the repositioning of tiles caused any new matches
+			
 			me.game.time.events.add(300, function(){
 				me.checkMatch();
 			});
@@ -271,7 +267,7 @@ Main.prototype = {
 		}
 		else {
 
-			//No match so just swap the tiles back to their original position and reset
+			
 			me.swapTiles();
 			me.game.time.events.add(300, function(){
 				me.tileUp();
@@ -286,7 +282,7 @@ Main.prototype = {
 		var matches = [];
 		var groups = [];
 
-		//Check for horizontal matches
+		
 		for (var i = 0; i < tileGrid.length; i++)
 		{
 			var tempArr = tileGrid[i];
@@ -325,7 +321,7 @@ Main.prototype = {
 			if(groups.length > 0) matches.push(groups);
 		}
 
-		//Check for vertical matches
+		
 		for (j = 0; j < tileGrid.length; j++)
 		{
 			var tempArr = tileGrid[j];
@@ -373,7 +369,7 @@ Main.prototype = {
 		
 		var me = this;
 
-		//Loop through all the matches and remove the associated tiles
+		
 		for(var i = 0; i < matches.length; i++){
 			var tempArr = matches[i];
                         var tile = tempArr[0];
@@ -381,22 +377,22 @@ Main.prototype = {
 			for(var j = 0; j < tempArr.length; j++){
 
 				var tile = tempArr[j];
-				//Find where this tile lives in the theoretical grid
+				
 				var tilePos = me.getTilePos(me.tileGrid, tile);
 
-				//Remove the tile from the screent
+				
 				me.tiles.remove(tile);
                             
 				
 
-				//Remove the tile from the theoretical grid
+				
 				if(tilePos.x != -1 && tilePos.y != -1){
 					me.tileGrid[tilePos.x][tilePos.y] = null;
 				}
 				
 			}
                         
-                        //Increase the users score
+                        
             me.incrementScore(tempArr);
             if (tempArr.length > 3) {
             var ax=-1;
@@ -457,12 +453,12 @@ Main.prototype = {
 	{
 		var pos = {x:-1, y:-1};
 
-		//Find the position of a specific tile in the grid
+		
 		for(var i = 0; i < tileGrid.length ; i++)
 		{
 			for(var j = 0; j < tileGrid[i].length; j++)
 			{
-				//There is a match at this position so return the grid coords
+				
 				if(tile == tileGrid[i][j])
 				{
 					pos.x = i;
@@ -479,27 +475,25 @@ Main.prototype = {
 
 		var me = this;
 
-		//Loop through each column starting from the left
+		
 		for (var i = 0; i < me.tileGrid.length; i++)
 		{
 
-			//Loop through each tile in column from bottom to top
+			
 			for (var j = me.tileGrid[i].length - 1; j > 0; j--)
 			{
 
-				//If this space is blank, but the one above it is not, move the one above down
+				
 				if(me.tileGrid[i][j] == null && me.tileGrid[i][j-1] != null)
 				{
-					//Move the tile above down one
+					
 					var tempTile = me.tileGrid[i][j-1];
 					me.tileGrid[i][j] = tempTile;
 					me.tileGrid[i][j-1] = null;
 
 					me.game.add.tween(tempTile).to({y:(me.tileHeight*j)+(me.tileHeight/2)}, 100, Phaser.Easing.Linear.In, true);
 
-					//The positions have changed so start this process again from the bottom
-					//NOTE: This is not set to me.tileGrid[i].length - 1 because it will immediately be decremented as
-					//we are at the end of the loop.
+					
 					j = me.tileGrid[i].length;
 				}
 			}
@@ -511,18 +505,18 @@ Main.prototype = {
 
 		var me = this;
 
-		//Check for blank spaces in the grid and add new tiles at that position
+		
 		for(var i = 0; i < me.tileGrid.length; i++){
 
 			for(var j = 0; j < me.tileGrid.length; j++){
 
 				if (me.tileGrid[i][j] == null)
 				{
-					//Found a blank spot so lets add animate a tile there
+					
 					
 					var tile = me.addTile(i, j,0);
 
-					//And also update our "theoretical" grid
+					
 					me.tileGrid[i][j] = tile;
 				}
 
