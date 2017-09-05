@@ -11,9 +11,10 @@ Preload.prototype = {
 		this.game.load.image('6', 'assets/gemBonusGreen.png');
 		this.game.load.image('7', 'assets/gemBonusRed.png');
 		this.game.load.image('8', 'assets/gemBonusYellow.png');
+                game.load.spritesheet('button', 'assets/startbutton.png');
 	},
 
 	create: function(){
-		this.game.state.start("Main");
+		this.game.state.start("GameTitle");
 	}
 }
