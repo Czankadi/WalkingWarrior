@@ -8,18 +8,23 @@ Main.prototype = {
 
 		var me = this;
 
-		me.game.stage.backgroundColor = "34495f";
+		background = game.add.tileSprite(0, 0, 1200, 1200, "background");
 
 		//Declare assets that will be used as tiles
 		me.tileTypes = [
-			'1', //blue
-			'2',//green
-			'3', //red
-			'4',//yellow
-			'5',//bblue
-			'6',//bgreen
-			'7', //bred
-			'8'//byellow
+			'1', //nervecell
+			'2',//neutrophil
+			'3', //platelet
+			'4',//redbloodcell
+			'5',//stemcell
+			'6',//whitebloodcell
+			'7', //bnerve
+			'8',//bneutro
+                        '9',//bplat
+                        '10',//bredb
+                        '11', //bstemc
+                        '12', //bwhiteblood
+                        
 			
 		];
 
@@ -158,19 +163,25 @@ Main.prototype = {
 
 		//Choose a random tile to add
 		if (type ==0){
-		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 5)];	
-		}
-		if (type ==5){
-		var tileToAdd = me.tileTypes[4];	
-		}
-		if (type ==6){
-		var tileToAdd = me.tileTypes[5];	
+		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 7)];	
 		}
 		if (type ==7){
-		var tileToAdd = me.tileTypes[6];	
+		var tileToAdd = me.tileTypes[7];	
 		}
 		if (type ==8){
-		var tileToAdd = me.tileTypes[7];	
+		var tileToAdd = me.tileTypes[8];	
+		}
+		if (type ==9){
+		var tileToAdd = me.tileTypes[9];	
+		}
+		if (type ==10){
+		var tileToAdd = me.tileTypes[10];              
+		}
+                if (type ==11){
+		var tileToAdd = me.tileTypes[11];              
+		}
+                if (type ==12){
+		var tileToAdd = me.tileTypes[12];              
 		}
 		
 		
@@ -311,7 +322,7 @@ Main.prototype = {
 				if(j < tempArr.length - 2)
 					if (tileGrid[i][j] && tileGrid[i][j + 1] && tileGrid[i][j + 2])
 					{
-						if ((Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+4 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+4 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-4) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+4) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-4 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-4 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+4) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-4) )
+						if ((Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-6) )
 						{
 							if (groups.length > 0)
 							{
@@ -350,7 +361,7 @@ Main.prototype = {
 				if(i < tempArr.length - 2)
 					if (tileGrid[i][j] && tileGrid[i+1][j] && tileGrid[i+2][j])
 					{
-						if ((Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+4 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+4 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-4) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+4) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-4 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-4 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+4) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-4) )
+						if ((Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-6) )
 						{
 							if (groups.length > 0)
 							{
@@ -444,19 +455,25 @@ Main.prototype = {
                 console.log(ax);
                 console.log(tilePos.x);
                 console.log(tilePos.y);
-                console.log(4+Number(tempArr[0].tileType));
+                console.log(6+Number(tempArr[0].tileType));
                 var type = 0;
                 if (tempArr[0].tileType == 1) {
-                    type=5;
-                }
-                if (tempArr[0].tileType == 2) {
-                    type=6;
-                }
-                if (tempArr[0].tileType == 3) {
                     type=7;
                 }
-                if (tempArr[0].tileType == 4) {
+                if (tempArr[0].tileType == 2) {
                     type=8;
+                }
+                if (tempArr[0].tileType == 3) {
+                    type=9;
+                }
+                if (tempArr[0].tileType == 4) {
+                    type=10;
+                }
+                if (tempArr[0].tileType == 5) {
+                    type=11;
+                }
+                if (tempArr[0].tileType == 6) {
+                    type=12;
                 }
                 if (ax!=-1 && ay!=-1){
                 var tile2 = me.addTile(ax, ay, type);
@@ -464,6 +481,7 @@ Main.prototype = {
             }
             var tile2 = me.addTile(tilePos.x, tilePos.y, type);
                 me.tileGrid[tilePos.x][tilePos.y] = tile2;
+                me.resetTile();
             }
         }
     },

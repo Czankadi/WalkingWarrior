@@ -4,13 +4,13 @@ GameTitle.prototype = {
 
 	create: function(){
             var me =this;
-            game.stage.backgroundColor = '#182d3b';
+             background = game.add.tileSprite(0, 0, 1200, 1200, "background");
             var text = "Walking Warrior";
     var style = { font: "100px Arial", fill: "#000", align: "center" };
     var t = this.game.add.text(220, 100, text, style);
     
     button = game.add.button(442, 400, 'button', actionOnClick, this, 2, 1, 0);
-
+   
 //    button.onInputOver.add(over, this);
 //    button.onInputOut.add(out, this);
 //    button.onInputUp.add(up, this);
