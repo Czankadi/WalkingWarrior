@@ -4,7 +4,7 @@ GameTitle.prototype = {
 
 	create: function(){
             var me =this;
-             background = game.add.tileSprite(0, 0, 1200, 1200, "background");
+             background = game.add.tileSprite(0, 0, 1400, 1920, "background");
             var text = "Walking Warrior";
     var style = { font: "100px Arial", fill: "#000", align: "center" };
     var t = this.game.add.text(220, 100, text, style);

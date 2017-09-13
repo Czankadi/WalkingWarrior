@@ -8,7 +8,7 @@ Main.prototype = {
 
 		var me = this;
 
-		background = game.add.tileSprite(0, 0, 1200, 1200, "background");
+		background = game.add.tileSprite(0, 0, 1400, 1920, "background");
 
 		//Declare assets that will be used as tiles
 		me.tileTypes = [
@@ -30,7 +30,8 @@ Main.prototype = {
 
 		//Keep track of the users score
 		me.score = 0;
-                me.moves = 10;
+                me.moves = 2;
+                me.replays = 3;
                 me.wasmove = false;
                 me.firsttime = true;
 		//Keep track of the tiles the user is trying to swap (if any)
@@ -50,12 +51,14 @@ Main.prototype = {
 		//Initialise tile grid, this array will hold the positions of the tiles
 		//Create whatever shape you'd like
 		me.tileGrid = [
-			[null, null, null, null,  null],
-			[null, null, null, null,  null],
-			[null, null, null, null,  null],
-			[null, null, null, null,  null],
-			[null, null, null, null,  null]
-			
+			[null, null, null, null, null, null, null,  null, null],
+			[null, null, null, null, null, null, null,  null, null],
+			[null, null, null, null, null, null, null,  null, null],
+			[null, null, null, null, null, null, null,  null, null],
+                        [null, null, null, null, null, null, null,  null, null],
+			[null, null, null, null, null, null, null,  null, null]
+                        
+
 		];
 
 		//Create a random data generator to use later
@@ -66,16 +69,70 @@ Main.prototype = {
 		me.initTiles();
 		me.createScore();
                 me.createMoves();
+                me.createReplays();
 
 	},
+ 
+        nothing: function(){
+            var me = this;
+           me.text3Label.text ="Out of Moves - Restarting";  
+        },
 
 	update: function() {
             
-            
 		var me = this;
                 
-                if ( me.moves ==0){
+                if ( me.replays ==0){
+                    
                     this.game.state.start("GameOver");
+                }
+                
+                 if ( me.moves ==0){
+                     var me = this;
+                     
+                     me.score = 0;
+                     me.scoreLabel=me.score;
+                   
+                    
+                    me.incrementPlays();
+		
+		for(var i = 0; i < me.tileGrid.length; i++){
+			for(var j = 0; j < me.tileGrid[i].length; j++){
+                            
+                        var tile = me.tileGrid[i][j];
+                            var tilePos = me.getTilePos(me.tileGrid, tile);
+			
+				//Find where this tile lives in the theoretical grid
+				var tilePos = me.getTilePos(me.tileGrid, tile);
+
+				//Remove the tile from the screent
+				me.tiles.remove(tile);
+                            
+				
+
+				//Remove the tile from the theoretical grid
+				if(tilePos.x != -1 && tilePos.y != -1){
+					me.tileGrid[tilePos.x][tilePos.y] = null;
+				}
+                        }	
+			}
+                 var tFont = "80px Arial";
+              
+                me.text3Label = me.game.add.text(100, 1780, "0", {font: tFont, fill: "#fff"}); 
+                
+                
+                  me.text3Label.text ="";       
+                   setTimeout('nothing',1000);
+                   
+                       
+                  
+                    me.wasmove = false;
+                    me.firsttime = true;
+                    
+                    me.initTiles();
+                    me.moves = 10; 
+                    me.movesLabel.text = me.moves;
+                    
                 }
                 
                 
@@ -139,10 +196,10 @@ Main.prototype = {
 		for(var i = 0; i < me.tileGrid.length; i++){
 
 			//Loop through each position in a specific column, starting from the top
-			for(var j = 0; j < me.tileGrid.length; j++){
+			for(var j = 0; j < me.tileGrid[i].length; j++){
 
 				//Add the tile to the game at this grid position
-				var tile = me.addTile(i, j,0);
+				var tile = me.addTile(i, j, 0);
 
 				//Keep a track of the tiles position in our tileGrid
 				me.tileGrid[i][j] = tile;
@@ -166,22 +223,28 @@ Main.prototype = {
 		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 7)];	
 		}
 		if (type ==7){
-		var tileToAdd = me.tileTypes[7];	
+                    console.log("7esvolt");
+		var tileToAdd = me.tileTypes[6];	
 		}
 		if (type ==8){
-		var tileToAdd = me.tileTypes[8];	
+                    console.log("8esvolt");
+		var tileToAdd = me.tileTypes[7];	
 		}
 		if (type ==9){
-		var tileToAdd = me.tileTypes[9];	
+                    console.log("9esvolt");
+		var tileToAdd = me.tileTypes[8];	
 		}
 		if (type ==10){
-		var tileToAdd = me.tileTypes[10];              
+                    console.log("10esvolt");
+		var tileToAdd = me.tileTypes[9];              
 		}
                 if (type ==11){
-		var tileToAdd = me.tileTypes[11];              
+                    console.log("11esvolt");
+		var tileToAdd = me.tileTypes[10];              
 		}
                 if (type ==12){
-		var tileToAdd = me.tileTypes[12];              
+                    console.log("12esvolt");
+		var tileToAdd = me.tileTypes[11];              
 		}
 		
 		
@@ -352,9 +415,12 @@ Main.prototype = {
 		}
 
 		//Check for vertical matches
-		for (j = 0; j < tileGrid.length; j++)
+		for (j = 0; j < tileGrid[0].length; j++)
 		{
-			var tempArr = tileGrid[j];
+      // This below will not work on non square tile grids!
+			//var tempArr = tileGrid[j];
+      // Use something from here instead: https://stackoverflow.com/questions/7848004/get-column-from-a-two-dimensional-array-in-javascript
+      var tempArr = tileGrid.map(function(value,index) { return value[j]; });
 			groups = [];
 			for (i = 0; i < tempArr.length; i++)
 			{
@@ -433,13 +499,10 @@ Main.prototype = {
                 var tilePos3 = me.getTilePos(me.tileGrid, tile3);
                 var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);
                 var atilePos2 = me.getTilePos(me.tileGrid, me.activeTile2);
-                console.log("active1");
-                console.log(atilePos1.x);
-                console.log(atilePos1.y);
-                console.log("tilepos3");
-                console.log(tilePos3.x);
-                console.log(tilePos3.y);
-             
+                console.log("type");
+               
+                console.log(tile3.tileType);
+                
                 if (tilePos3.x==atilePos1.x && tilePos3.y==atilePos1.y){
                     ax=atilePos1.x;
                     ay=atilePos1.y;
@@ -569,7 +632,7 @@ Main.prototype = {
 		var me = this;
 		var scoreFont = "100px Arial";
 
-		me.scoreLabel = me.game.add.text(750, 1050, "0", {font: scoreFont, fill: "#fff"}); 
+		me.scoreLabel = me.game.add.text(950, 1780, "0", {font: scoreFont, fill: "#fff"}); 
 		me.scoreLabel.anchor.setTo(0, 0);
 		me.scoreLabel.align = 'center';
                 me.scoreLabel.text ="Score: "+ me.score; 
@@ -580,12 +643,26 @@ Main.prototype = {
 		var me = this;
 		var scoreFont = "100px Arial";
                 var textFont = "36px Arial";
-                me.textLabel = me.game.add.text((Math.floor(me.tileGrid[0].length) * me.tileWidth+20), 80, "0", {font: textFont, fill: "#fff"}); 
+                me.textLabel = me.game.add.text(1230, 80, "0", {font: textFont, fill: "#fff"}); 
                 me.textLabel.text ="Moves left:"; 
-		me.movesLabel = me.game.add.text((Math.floor(me.tileGrid[0].length) * me.tileWidth+50), 120, "0", {font: scoreFont, fill: "#fff"}); 
+		me.movesLabel = me.game.add.text(1230, 120, "0", {font: scoreFont, fill: "#fff"}); 
 		me.movesLabel.anchor.setTo(0, 0);
 		me.movesLabel.align = 'center';
                 me.movesLabel.text = me.moves; 
+
+	},
+        
+         createReplays: function(){
+
+		var me = this;
+		var scoreFont = "100px Arial";
+                var textFont = "32px Arial";
+                me.text2Label = me.game.add.text(1220, 250, "0", {font: textFont, fill: "#fff"}); 
+                me.text2Label.text ="Replays left:"; 
+		me.playsLabel = me.game.add.text(1230, 290, "0", {font: scoreFont, fill: "#fff"}); 
+		me.playsLabel.anchor.setTo(0, 0);
+		me.playsLabel.align = 'center';
+                me.playsLabel.text = me.replays; 
 
 	},
 
@@ -611,9 +688,16 @@ Main.prototype = {
                 var me = this;
 		me.moves-=1;
             
-		me.movesLabel.text = me.moves; 		
-
-	},
+		me.movesLabel.text = me.moves;
+           },
+            incrementPlays: function(){
+                var me = this;
+		me.replays-=1;
+            
+		me.playsLabel.text = me.replays;        
+            
+            },
+	
 
         
         

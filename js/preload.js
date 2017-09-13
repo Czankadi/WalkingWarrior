@@ -3,6 +3,8 @@ var Preload = function(game){};
 Preload.prototype = {
 
 	preload: function(){ 
+           
+           
 		this.game.load.image('1', 'assets/Nerve Cell.png');
 		this.game.load.image('2', 'assets/neutrophil.png');
 		this.game.load.image('3', 'assets/platelet.png');
