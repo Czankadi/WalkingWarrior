@@ -30,10 +30,11 @@ Main.prototype = {
 
 		//Keep track of the users score
 		me.score = 0;
-                me.moves = 2;
+                me.moves = 10;
                 me.replays = 3;
                 me.wasmove = false;
                 me.firsttime = true;
+                me.switches= false;
 		//Keep track of the tiles the user is trying to swap (if any)
 		me.activeTile1 = null;
 		me.activeTile2 = null;
@@ -70,6 +71,7 @@ Main.prototype = {
 		me.createScore();
                 me.createMoves();
                 me.createReplays();
+                me.createSwitch();
 
 	},
  
@@ -82,12 +84,12 @@ Main.prototype = {
             
 		var me = this;
                 
-                if ( me.replays ==0){
+                if ( me.replays <=0){
                     
                     this.game.state.start("GameOver");
                 }
                 
-                 if ( me.moves ==0){
+                 if ( me.moves <=0){
                      var me = this;
                      
                      me.score = 0;
@@ -167,7 +169,7 @@ Main.prototype = {
 
 					//Swap the two active tiles
 					me.swapTiles();
-
+                                       
 					//After the swap has occurred, check the grid for any matches
 					me.game.time.events.add(300, function(){
 						me.checkMatch();
@@ -356,6 +358,9 @@ Main.prototype = {
 		else {
 
 			//No match so just swap the tiles back to their original position and reset
+                         if (me.switches==false){
+                                            
+                                        
 			me.swapTiles();
 			me.game.time.events.add(300, function(){
 				me.tileUp();
@@ -366,6 +371,16 @@ Main.prototype = {
                                 me.wasmove = false;
                                 me.firsttime = false;
 			});
+                         }
+                          if (me.switches==true){
+                              
+                                            me.moves -=3;
+                                            me.switches= false;
+                                            me.movesLabel.text = me.moves;
+                                            me.canMove = true;
+                                            me.createSwitch();
+                                            me.tileUp();
+                                        }
 		}
                 
 	},
@@ -469,10 +484,16 @@ Main.prototype = {
 		for(var i = 0; i < matches.length; i++){
 			var tempArr = matches[i];
                         var tile = tempArr[0];
+                       
                             var tilePos = me.getTilePos(me.tileGrid, tile);
 			for(var j = 0; j < tempArr.length; j++){
 
 				var tile = tempArr[j];
+                                 if (Number(tile.tileType)>6){
+                            me.moves +=2;
+                            me.movesLabel.text = me.moves;
+                            
+                        }
 				//Find where this tile lives in the theoretical grid
 				var tilePos = me.getTilePos(me.tileGrid, tile);
 
@@ -663,6 +684,25 @@ Main.prototype = {
 		me.playsLabel.anchor.setTo(0, 0);
 		me.playsLabel.align = 'center';
                 me.playsLabel.text = me.replays; 
+
+	},
+        
+         createSwitch: function(){
+
+		var me = this;
+		me.switch = game.add.button(1230, 400, 'switch', switchOnClick, this, 2, 1, 0);
+                me.switch.scale.setTo(0.32,0.32);
+        function switchOnClick () {
+            me.switches= true;
+            me.switch = game.add.button(1230, 400, 'redswitch', switchOnClick2, this, 2, 1, 0);
+            me.switch.scale.setTo(0.32,0.32);
+            function switchOnClick2 () {
+            me.switches= false;
+            me.switch = game.add.button(1230, 400, 'switch', switchOnClick, this, 2, 1, 0);
+            me.switch.scale.setTo(0.32,0.32);
+         }
+         }
+                
 
 	},
 

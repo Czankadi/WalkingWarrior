@@ -6,11 +6,13 @@ GameTitle.prototype = {
             var me =this;
              background = game.add.tileSprite(0, 0, 1400, 1920, "background");
             var text = "Walking Warrior";
-    var style = { font: "100px Arial", fill: "#000", align: "center" };
-    var t = this.game.add.text(220, 100, text, style);
+    var style = { font: "180px Arial", fill: "#000", align: "center" };
+    var t = this.game.add.text(80, 100, text, style);
     
-    button = game.add.button(442, 400, 'button', actionOnClick, this, 2, 1, 0);
-   
+    button = game.add.button(460, 400, 'playbutton', actionOnClick, this, 2, 1, 0);
+   button.scale.setTo(0.91,0.91);
+    title = game.add.audio('game');
+    title.loopFull(0.8);
 //    button.onInputOver.add(over, this);
 //    button.onInputOut.add(out, this);
 //    button.onInputUp.add(up, this);
@@ -19,14 +21,10 @@ GameTitle.prototype = {
     me.startGame();
 
 }
-//            var scoreFont = "100px Arial";
-//            me.titleLabel = me.game.add.text(600, 600, "0", {font: scoreFont, fill: "#fff"}); 
-//		me.titleLabel.anchor.setTo(0, 0);
-//		me.titleLabel.align = 'center';
-//                me.titleLabel.text = me.moves;  
-//                me.titleLabel ="Walking warrior";
-                
-          //  me.startGame();
+infobutton = game.add.button(442, 900, 'infobutton', infoOnClick, this, 2, 1, 0);
+        function infoOnClick () {
+            this.game.state.start("Info");
+         }   
 	},
 
 	startGame: function(){
