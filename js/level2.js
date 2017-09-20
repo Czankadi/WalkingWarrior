@@ -1,8 +1,8 @@
-var Main = function(game){
+var Level2 = function(game){
 
 };
 
-Main.prototype = {
+Level2.prototype = {
 
 	create: function() {
 
@@ -32,10 +32,10 @@ Main.prototype = {
 		me.score = 0;
                 me.moves = 10;
                 me.replays = 3;
+                me.bonus = 0;
                 me.wasmove = false;
                 me.firsttime = true;
                 me.switches= false;
-                me.delete =false;
 		//Keep track of the tiles the user is trying to swap (if any)
 		me.activeTile1 = null;
 		me.activeTile2 = null;
@@ -79,7 +79,6 @@ Main.prototype = {
                 me.createMoves();
                 me.createReplays();
                 me.createSwitch();
-                me.createDelete();
                 
 	},
  
@@ -91,7 +90,7 @@ Main.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=30){
+                 if (me.bonus>=4){
                    this.game.state.start("NextLevel");  
                  }
                 if ( me.replays <=0){
@@ -151,25 +150,7 @@ Main.prototype = {
 		//The user is currently dragging from a tile, so let's see if they have dragged
 		//over the top of an adjacent tile
 		if(me.activeTile1 && !me.activeTile2){
-                    if (me.delete == true){
-                        me.tiles.remove(me.activeTile1);
-                        var tilePos = me.getTilePos(me.tileGrid, me.activeTile1);
 
-				//Remove the tile from the theoretical grid
-				if(tilePos.x != -1 && tilePos.y != -1){
-					me.tileGrid[tilePos.x][tilePos.y] = null;
-                                    }
-                                        me.delete = false;
-                                        me.resetTile();
-                                        
-                                        me.tileUp();
-                                         me.createDelete();
-                                        me.moves -=2;
-                                        me.movesLabel.text = me.moves;
-                                        me.checkMatch();
-                                        me.resetTile();
-                                        me.fillTile(0);
-                    }
 			//Get the location of where the pointer is currently
 			var hoverX = me.game.input.x;
 			var hoverY = me.game.input.y;
@@ -326,7 +307,7 @@ Main.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 30 points";
+                me.text3Label.text="Destroy 4 Bonus tiles  "+me.bonus+"/4" ;
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
 
@@ -518,6 +499,7 @@ Main.prototype = {
 
 				var tile = tempArr[j];
                                  if (Number(tile.tileType)>6){
+                            me.bonus+=1;
                             me.moves +=2;
                             me.movesLabel.text = me.moves;
                             
@@ -735,25 +717,7 @@ Main.prototype = {
 
 	},
         
-           createDelete: function(){
-
-		var me = this;
-		me.switch = game.add.button(1230, 550, 'delete', switchOnClick, this, 2, 1, 0);
-                me.switch.scale.setTo(0.12,0.12);
-        function switchOnClick () {
-            me.delete=true;
-            me.switch = game.add.button(1230, 550, 'reddelete', switchOnClick2, this, 2, 1, 0);
-            me.switch.scale.setTo(0.192,0.192);
-            function switchOnClick2 () {
-            me.delete=false;
-            me.switch = game.add.button(1230, 550, 'delete', switchOnClick, this, 2, 1, 0);
-            me.switch.scale.setTo(0.12,0.12);
-         }
-         }
-                
-
-	},
-
+        
 
 
 	incrementScore: function(tempArr){

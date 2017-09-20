@@ -22,12 +22,15 @@ Preload.prototype = {
                 this.game.load.spritesheet('backbutton', 'assets/backbutton.png');
                 this.game.load.spritesheet('switch', 'assets/switch.png');
                 this.game.load.spritesheet('redswitch', 'assets/redswitch.png');
+                this.game.load.spritesheet('delete', 'assets/delete.png');
+                this.game.load.spritesheet('reddelete', 'assets/reddelete.png');
                 this.game.load.image("background", "assets/background.jpg");
-                this.game.load.audio('title', 'assets/title.m4a');
-                this.game.load.audio('game', 'assets/game.m4a');
+                this.game.load.audio('title', 'assets/title.mp3');
+                this.game.load.audio('game', 'assets/game.mp3');
 	},
 
 	create: function(){
+          
 		this.game.state.start("GameTitle");
 	}
 }

@@ -1,13 +1,13 @@
-var GameOver = function(game){};
+var NextLevel = function(game){};
 
-GameOver.prototype = {
+NextLevel.prototype = {
     
    
   	create: function(){
             var me =this;
            
             background = game.add.tileSprite(0, 0, 1400, 1920, "background");;
-            var text = "Game over";
+            var text = "Level Completed!!";
              var style = { font: "100px Arial", fill: "#000", align: "center" };
         var t = this.game.add.text(520, 100, text, style);
      button = game.add.button(460, 400, 'playbutton', actionOnClick, this, 2, 1, 0);
@@ -25,7 +25,7 @@ GameOver.prototype = {
 	},
 
 	restartGame: function(){
-		this.game.state.start("GameTitle");
+		this.game.state.start("Level2");
 	}
 	
 }
