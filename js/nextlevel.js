@@ -25,7 +25,12 @@ NextLevel.prototype = {
 	},
 
 	restartGame: function(){
+            if (s==1){
 		this.game.state.start("Level2");
+            }
+            if (s==2){
+                this.game.state.start("Level2");
+            }
 	}
 	
 }

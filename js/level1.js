@@ -1,8 +1,8 @@
-var Main = function(game){
+var Level1 = function(game){
 
 };
 
-Main.prototype = {
+Level1.prototype = {
 
 	create: function() {
 
@@ -31,9 +31,11 @@ Main.prototype = {
 
 		//Keep track of the users score
                 s=1;
+                if(!replays){
                 replays = -1;
+            }
 		me.score = 0;
-                me.moves = 2000;
+                me.moves = 20;
                 me.replays = 3;
                 me.wasmove = false;
                 me.firsttime = true;
@@ -82,8 +84,8 @@ Main.prototype = {
 		me.createScore();
                 me.createMoves();
                 me.createReplays();
-                me.createSwitch();
-                me.createDelete();
+              //  me.createSwitch();
+              //  me.createDelete();
                 
 	},
  
@@ -95,7 +97,7 @@ Main.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=60){ 
+                 if (me.score>=30){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -111,45 +113,9 @@ Main.prototype = {
                    
                     
                     me.incrementPlays();
-		
-		for(var i = 0; i < me.tileGrid.length; i++){
-			for(var j = 0; j < me.tileGrid[i].length; j++){
-                            
-                        var tile = me.tileGrid[i][j];
-                            var tilePos = me.getTilePos(me.tileGrid, tile);
-			
-				//Find where this tile lives in the theoretical grid
-				var tilePos = me.getTilePos(me.tileGrid, tile);
-
-				//Remove the tile from the screent
-				me.tiles.remove(tile);
-                            
-				
-
-				//Remove the tile from the theoretical grid
-				if(tilePos.x != -1 && tilePos.y != -1){
-					me.tileGrid[tilePos.x][tilePos.y] = null;
-				}
-                        }	
-			}
-                
-              
-               
-                
-                
-                       
-                 me.text3Label.text ="Out of Moves - Restarting";  
-                   
-                       
-                  
-                    me.wasmove = false;
-                    me.firsttime = true;
-                    
-                    me.initTiles();
-                    me.moves = 10; 
-                    me.movesLabel.text = me.moves;
-                     me.score = 0;
-                     me.scoreLabel.text= "Score: " +me.score;
+                    replays=me.replays;
+                    this.game.state.start("Level1");
+	
                 }
                 
                 
@@ -257,13 +223,13 @@ Main.prototype = {
 		if (type ==0){
                  if (me.count!=10){     
 		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 9)];
-                me.count+=1;
+               // me.count+=1;
                 
             }    
                     
                     if (me.count==10){
                         var tileToAdd = me.tileTypes[12];
-                        me.count+=1;
+                       // me.count+=1;
                         
                     }
                     if (me.count==20){
@@ -346,7 +312,7 @@ Main.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 60 points";
+                me.text3Label.text="Reach 30 points";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -472,80 +438,6 @@ Main.prototype = {
 
 		var matches = [];
 		var groups = [];
-                
-                //L part starting
-                for (var i = 0; i < tileGrid.length-2; i++)
-		{
-			var tempArr = tileGrid[i];
-			groups = [];
-			for (var j = 0; j < tempArr.length; j++)
-			{
-                            //L part
-                            
-                           if(j < tempArr.length - 2)
-					if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+2][j+2]!== 'undefined'  )
-					{
-						if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+2][j+2].tileType) )
-						{
-                                                    console.log("That was an L");
-                                                    break;
-                                                }
-                                        } 
-                                        if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i-2][j+2] !== 'undefined'){
-                                            
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-2][j+2].tileType) )
-						{
-                                                    console.log("That was also an L upside");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+2][j]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+2][j].tileType) )
-						{
-                                                    console.log("That was   an L upside too");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i-2][j]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-2][j].tileType) )
-						{
-                                                    console.log("That was a an L aswell");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+2][j+1]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j+1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+2][j+1].tileType) )
-						{
-                                                    console.log("That was a T");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' && typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i-2][j+1]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j+1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-2][j+1].tileType) )
-						{
-                                                    console.log("That was a  T aswell");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+1][j]!== 'undefined' &&  typeof tileGrid[i-1][j]!== 'undefined' ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) )
-						{
-                                                    console.log("That was a  T aswell");
-                                                    break;
-                                                }
-                                            }
-                                            if ( tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+1][j+2]!== 'undefined'  && typeof tileGrid[i-1][j+2]!== 'undefined' ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j+2].tileType) )
-						{
-                                                    console.log("That was a  T aswell");
-                                                    break;
-                                                }
-                                                
-                                            }
-                                        }
-                                    }
-                            //L part ending
-                
 
 		//Check for horizontal matches
 		for (var i = 0; i < tileGrid.length; i++)
@@ -554,7 +446,6 @@ Main.prototype = {
 			groups = [];
 			for (var j = 0; j < tempArr.length; j++)
 			{
-
 				if(j < tempArr.length - 2)
 					if (tileGrid[i][j] && tileGrid[i][j + 1] && tileGrid[i][j + 2])
 					{

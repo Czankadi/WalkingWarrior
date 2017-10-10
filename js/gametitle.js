@@ -14,7 +14,7 @@ GameTitle.prototype = {
     var style = { font: "180px Arial", fill: "#000", align: "center" };
     var t = this.game.add.text(80, 100, text, style);
     
-    button = game.add.button(460, 400, 'playbutton', actionOnClick, this, 2, 1, 0);
+    button = game.add.button(460, 350, 'playbutton', actionOnClick, this, 2, 1, 0);
    button.scale.setTo(0.91,0.91);
    
 //    button.onInputOver.add(over, this);
@@ -25,15 +25,21 @@ GameTitle.prototype = {
     me.startGame();
 
 }
-infobutton = game.add.button(442, 900, 'infobutton', infoOnClick, this, 2, 1, 0);
+infobutton = game.add.button(442, 850, 'infobutton', infoOnClick, this, 2, 1, 0);
         function infoOnClick () {
+            this.game.state.start("Description");
+         }  
+selectbutton = game.add.button(442, 1380, 'selectbutton', selectOnClick, this, 2, 1, 0);
+        function selectOnClick () {
             this.game.state.start("Info");
-         }   
+         }          
+         
 	},
 
 	startGame: function(){
             title.stop();
-		this.game.state.start("Main");
+            replays=3;
+		this.game.state.start("Level1");
                 
 	}
 

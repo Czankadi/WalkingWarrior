@@ -17,9 +17,15 @@ Preload.prototype = {
                 this.game.load.image('10', 'assets/BRedbloodcell.png');
                 this.game.load.image('11', 'assets/BStem Cell.png');
                 this.game.load.image('12', 'assets/bwhite blood cell.png');
+                this.game.load.image('13', 'assets/nomatch.png');
+                this.game.load.image('14', 'assets/nomove.png');
                 this.game.load.spritesheet('playbutton', 'assets/startbutton.png');
                 this.game.load.spritesheet('infobutton', 'assets/infobutton.png');
+                this.game.load.spritesheet('selectbutton', 'assets/selectbutton.png');
                 this.game.load.spritesheet('backbutton', 'assets/backbutton.png');
+                this.game.load.spritesheet('sandbox', 'assets/sandbox.png');
+                this.game.load.spritesheet('1button', 'assets/1button.png');
+                this.game.load.spritesheet('2button', 'assets/2button.png');
                 this.game.load.spritesheet('switch', 'assets/switch.png');
                 this.game.load.spritesheet('redswitch', 'assets/redswitch.png');
                 this.game.load.spritesheet('delete', 'assets/delete.png');

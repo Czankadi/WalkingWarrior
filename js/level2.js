@@ -24,18 +24,24 @@ Level2.prototype = {
                         '10',//bredb
                         '11', //bstemc
                         '12', //bwhiteblood
-                        
+                        '13', // nomatch
+                        '14', // nomove
 			
 		];
 
 		//Keep track of the users score
+                s=2;
+                
 		me.score = 0;
-                me.moves = 10;
-                me.replays = 3;
-                me.bonus = 0;
+                me.moves = 2000;
+                me.replays = replays;
                 me.wasmove = false;
                 me.firsttime = true;
                 me.switches= false;
+                me.delete =false;
+                me.count= 0;
+                me.bonus= 0;
+                me.extratime=0;
 		//Keep track of the tiles the user is trying to swap (if any)
 		me.activeTile1 = null;
 		me.activeTile2 = null;
@@ -79,6 +85,7 @@ Level2.prototype = {
                 me.createMoves();
                 me.createReplays();
                 me.createSwitch();
+                me.createDelete();
                 
 	},
  
@@ -90,7 +97,8 @@ Level2.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.bonus>=4){
+                 if (me.score>=60){ 
+                     replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
                 if ( me.replays <=0){
@@ -98,7 +106,7 @@ Level2.prototype = {
                     this.game.state.start("GameOver");
                 }
                 
-                 if ( me.moves <=0){
+                 if ( me.moves <=0){  //restart part
                      var me = this;
                      
                     
@@ -141,7 +149,7 @@ Level2.prototype = {
                     
                     me.initTiles();
                     me.moves = 10; 
-                    me.movesLabel.text = me.moves;
+                    
                      me.score = 0;
                      me.scoreLabel.text= "Score: " +me.score;
                 }
@@ -150,7 +158,25 @@ Level2.prototype = {
 		//The user is currently dragging from a tile, so let's see if they have dragged
 		//over the top of an adjacent tile
 		if(me.activeTile1 && !me.activeTile2){
+                    if (me.delete == true){ //delete part
+                        me.tiles.remove(me.activeTile1);
+                        var tilePos = me.getTilePos(me.tileGrid, me.activeTile1);
 
+				//Remove the tile from the theoretical grid
+				if(tilePos.x != -1 && tilePos.y != -1){
+					me.tileGrid[tilePos.x][tilePos.y] = null;
+                                    }
+                                        me.delete = false;
+                                        me.resetTile();
+                                        
+                                        me.tileUp();
+                                         me.createDelete();
+                                        me.moves -=2;
+                                        
+                                        me.checkMatch();
+                                        me.resetTile();
+                                        me.fillTile(0);
+                    }
 			//Get the location of where the pointer is currently
 			var hoverX = me.game.input.x;
 			var hoverY = me.game.input.y;
@@ -211,7 +237,7 @@ Level2.prototype = {
 
 				//Add the tile to the game at this grid position
 				var tile = me.addTile(i, j, 0);
-
+                                    me.count=0;
 				//Keep a track of the tiles position in our tileGrid
 				me.tileGrid[i][j] = tile;
 
@@ -231,7 +257,22 @@ Level2.prototype = {
 
 		//Choose a random tile to add
 		if (type ==0){
-		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 7)];	
+                 if (me.count!=10){     
+		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 9)];
+              //  me.count+=1;
+                
+            }    
+                    
+                    if (me.count==10){
+                        var tileToAdd = me.tileTypes[12];
+                    //    me.count+=1;
+                        
+                    }
+                    if (me.count==20){
+                        var tileToAdd = me.tileTypes[13];
+                        me.count=0;               
+                    }
+              
 		}
 		if (type ==7){
                     console.log("7esvolt");
@@ -307,9 +348,44 @@ Level2.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Destroy 4 Bonus tiles  "+me.bonus+"/4" ;
+                me.text3Label.text="Reach 60 points";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
+                    if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
+                        me.tileUp();
+                        return;
+                    }
+                    if(Number(me.activeTile1.tileType)>6 && Number(me.activeTile2.tileType)>6 && Number(me.activeTile1.tileType)<13 && Number(me.activeTile2.tileType)<13){ //for 2 bonustile
+                        me.tiles.remove(me.activeTile1);
+                        var tilePos = me.getTilePos(me.tileGrid, me.activeTile1);
+
+				//Remove the tile from the theoretical grid
+				if(tilePos.x != -1 && tilePos.y != -1){
+					me.tileGrid[tilePos.x][tilePos.y] = null;
+                                    }
+                                    
+                                        
+                                    me.tiles.remove(me.activeTile2);
+                                   
+                        var tilePos2 = me.getTilePos(me.tileGrid, me.activeTile2);
+
+				//Remove the tile from the theoretical grid
+				if(tilePos2.x != -1 && tilePos2.y != -1){
+					me.tileGrid[tilePos2.x][tilePos2.y] = null;
+                                    }
+                                     
+                                       
+                                       
+                                        
+                                        me.resetTile();
+                                        
+                                      me.fillTile(0);
+                                    me.score+=10;
+                                    me.extratime+=5;
+                                    
+                                    me.scoreLabel.text="Score : " +me.score;
+                                    return;
+                    }
 
 			var tile1Pos = {x:(me.activeTile1.x - me.tileWidth / 2) / me.tileWidth, y:(me.activeTile1.y - me.tileHeight / 2) / me.tileHeight};
 			var tile2Pos = {x:(me.activeTile2.x - me.tileWidth / 2) / me.tileWidth, y:(me.activeTile2.y - me.tileHeight / 2) / me.tileHeight};
@@ -385,7 +461,7 @@ Level2.prototype = {
                               
                                             me.moves -=3;
                                             me.switches= false;
-                                            me.movesLabel.text = me.moves;
+                                            
                                             me.canMove = true;
                                             me.createSwitch();
                                             me.tileUp();
@@ -409,7 +485,7 @@ Level2.prototype = {
 				if(j < tempArr.length - 2)
 					if (tileGrid[i][j] && tileGrid[i][j + 1] && tileGrid[i][j + 2])
 					{
-						if ((Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-6) )
+						if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 &&((Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)+6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)-6 && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType) && Number(tileGrid[i][j+1].tileType) == Number(tileGrid[i][j+2].tileType)-6) ))
 						{
 							if (groups.length > 0)
 							{
@@ -451,7 +527,7 @@ Level2.prototype = {
 				if(i < tempArr.length - 2)
 					if (tileGrid[i][j] && tileGrid[i+1][j] && tileGrid[i+2][j])
 					{
-						if ((Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-6) )
+						if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 &&((Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)+6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)) ||(Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType)-6 && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)+6) || (Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i+1][j].tileType) == Number(tileGrid[i+2][j].tileType)-6)) )
 						{
 							if (groups.length > 0)
 							{
@@ -492,54 +568,25 @@ Level2.prototype = {
 		//Loop through all the matches and remove the associated tiles
 		for(var i = 0; i < matches.length; i++){
 			var tempArr = matches[i];
-                        var tile = tempArr[0];
-                       
-                            var tilePos = me.getTilePos(me.tileGrid, tile);
-			for(var j = 0; j < tempArr.length; j++){
-
-				var tile = tempArr[j];
-                                 if (Number(tile.tileType)>6){
-                            me.bonus+=1;
-                            me.moves +=2;
-                            me.movesLabel.text = me.moves;
-                            
-                        }
-				//Find where this tile lives in the theoretical grid
-				var tilePos = me.getTilePos(me.tileGrid, tile);
-
-				//Remove the tile from the screent
-				me.tiles.remove(tile);
-                            
-				
-
-				//Remove the tile from the theoretical grid
-				if(tilePos.x != -1 && tilePos.y != -1){
-					me.tileGrid[tilePos.x][tilePos.y] = null;
-				}
-				
-			}
-                        
-                        //Increase the users score
-            me.incrementScore(tempArr);
-            if (tempArr.length > 3) {
+                          if (tempArr.length > 3) { //bonustile part
             var ax=-1;
             var ay=-1;
-            for (var k = 0; k < tempArr.length; k++){
+            var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);
+            var atilePos2 = me.getTilePos(me.tileGrid, me.activeTile2);
+            console.log(atilePos1.x +" 1x " + atilePos1.y +" 1y " + atilePos2.x +" 2x " + atilePos2.y+ " 2y ");
+            for (var k = 0; k <=Number( tempArr.length)-1; k++){
                 var tile3 = tempArr[k];
-                
+                var tile4 = tempArr[k+1];
                 var tilePos3 = me.getTilePos(me.tileGrid, tile3);
-                var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);
-                var atilePos2 = me.getTilePos(me.tileGrid, me.activeTile2);
-                console.log("type");
-               
-                console.log(tile3.tileType);
+                var tilePos4 = me.getTilePos(me.tileGrid, tile4);
+                console.log(k+" "+tilePos3.x +" kx " + tilePos3.y +" ky ");
                 
-                if (tilePos3.x==atilePos1.x && tilePos3.y==atilePos1.y){
+                if (Number(tilePos3.y)== Number(tilePos4.y)&& Number(tilePos3.x)==Number(atilePos1.x) && Number(tilePos3.y)==Number(atilePos1.y)){
                     ax=atilePos1.x;
                     ay=atilePos1.y;
                 }
-                if (tilePos3.x==atilePos2.x && tilePos3.y==atilePos2.y){
-                   ax=atilePos2.x;
+                if (Number(tilePos3.y)== Number(tilePos4.y)&& Number(tilePos3.x)==Number(atilePos2.x) && Number(tilePos3.y)==Number(atilePos2.y)){
+                    ax=atilePos2.x;
                     ay=atilePos2.y; 
                 }
             }
@@ -547,9 +594,7 @@ Level2.prototype = {
                 console.log(ax);
                 console.log("ay");
                 console.log(ax);
-                console.log(tilePos.x);
-                console.log(tilePos.y);
-                console.log(6+Number(tempArr[0].tileType));
+                
                 var type = 0;
                 if (tempArr[0].tileType == 1) {
                     type=7;
@@ -573,10 +618,44 @@ Level2.prototype = {
                 var tile2 = me.addTile(ax, ay, type);
                 me.tileGrid[ax][ay] = tile2;
             }
+            if (ax==-1 && ay==-1){
+                  var tile = tempArr[3];
+                       
+                            var tilePos = me.getTilePos(me.tileGrid, tile);
             var tile2 = me.addTile(tilePos.x, tilePos.y, type);
                 me.tileGrid[tilePos.x][tilePos.y] = tile2;
                 me.resetTile();
             }
+            }
+                        var tile = tempArr[0];
+                       
+                            var tilePos = me.getTilePos(me.tileGrid, tile);
+			for(var j = 0; j < tempArr.length; j++){
+
+				var tile = tempArr[j];
+                                 if (Number(tile.tileType)>6){
+                            me.extratime +=5;
+                            
+                            
+                        }
+				//Find where this tile lives in the theoretical grid
+				var tilePos = me.getTilePos(me.tileGrid, tile);
+
+				//Remove the tile from the screent
+				me.tiles.remove(tile);
+                            
+				
+
+				//Remove the tile from the theoretical grid
+				if(tilePos.x != -1 && tilePos.y != -1){
+					me.tileGrid[tilePos.x][tilePos.y] = null;
+				}
+				
+			}
+                        
+                        //Increase the users score
+            me.incrementScore(tempArr);
+          
         }
     },
 
@@ -676,11 +755,34 @@ Level2.prototype = {
                 var textFont = "36px Arial";
                  var tFont = "80px Arial";
                 me.textLabel = me.game.add.text(1230, 80, "0", {font: textFont, fill: "#fff"}); 
-                me.textLabel.text ="Moves left:"; 
+                me.textLabel.text ="Time left:"; 
 		me.movesLabel = me.game.add.text(1230, 120, "0", {font: scoreFont, fill: "#fff"}); 
 		me.movesLabel.anchor.setTo(0, 0);
 		me.movesLabel.align = 'center';
-                me.movesLabel.text = me.moves; 
+                var start = Date.now();
+                var refreshIntervalId = setInterval(function() {
+                 delta = Date.now() - start; 
+                 // in seconds
+                // alternatively just show wall clock time:
+                me.movesLabel.text =60+me.extratime-Math.floor(delta / 1000);
+                me.resetTile();
+                if((50+me.extratime-Math.floor(delta / 1000))<-10){
+                   me.replays-=1;
+                   replays=me.replays;
+                   console.log(replays+" here");
+                   clearInterval(refreshIntervalId);
+                   if(me.replays==0){
+                       clearInterval(refreshIntervalId);
+                     this.game.state.start("GameOver");   
+                   }
+                   if(me.replays!=0){
+                       clearInterval(refreshIntervalId);
+                   this.game.state.start("Level2");
+               }
+                }
+                }, 1000); 
+                
+                
                 me.text3Label = me.game.add.text(20, 1800, "", {font: tFont, fill: "#fff"}); 
 	},
         
@@ -688,9 +790,9 @@ Level2.prototype = {
 
 		var me = this;
 		var scoreFont = "100px Arial";
-                var textFont = "32px Arial";
+                var textFont = "36px Arial";
                 me.text2Label = me.game.add.text(1220, 250, "0", {font: textFont, fill: "#fff"}); 
-                me.text2Label.text ="Replays left:"; 
+                me.text2Label.text ="Tokens left:"; 
 		me.playsLabel = me.game.add.text(1230, 290, "0", {font: scoreFont, fill: "#fff"}); 
 		me.playsLabel.anchor.setTo(0, 0);
 		me.playsLabel.align = 'center';
@@ -717,7 +819,25 @@ Level2.prototype = {
 
 	},
         
-        
+           createDelete: function(){
+
+		var me = this;
+		me.switch = game.add.button(1230, 550, 'delete', switchOnClick, this, 2, 1, 0);
+                me.switch.scale.setTo(0.12,0.12);
+        function switchOnClick () {
+            me.delete=true;
+            me.switch = game.add.button(1230, 550, 'reddelete', switchOnClick2, this, 2, 1, 0);
+            me.switch.scale.setTo(0.192,0.192);
+            function switchOnClick2 () {
+            me.delete=false;
+            me.switch = game.add.button(1230, 550, 'delete', switchOnClick, this, 2, 1, 0);
+            me.switch.scale.setTo(0.12,0.12);
+         }
+         }
+                
+
+	},
+
 
 
 	incrementScore: function(tempArr){
@@ -740,7 +860,7 @@ Level2.prototype = {
                 var me = this;
 		me.moves-=1;
             
-		me.movesLabel.text = me.moves;
+		
            },
             incrementPlays: function(){
                 var me = this;
@@ -749,8 +869,12 @@ Level2.prototype = {
 		me.playsLabel.text = me.replays;        
             
             },
+            
+            
 	
-
         
+        writeOutTokens: function(){
+            
+        },
         
 };
