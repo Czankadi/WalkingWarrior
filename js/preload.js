@@ -19,6 +19,8 @@ Preload.prototype = {
                 this.game.load.image('12', 'assets/bwhite blood cell.png');
                 this.game.load.image('13', 'assets/nomatch.png');
                 this.game.load.image('14', 'assets/nomove.png');
+                this.game.load.image('15', 'assets/Magnesium.png');
+                this.game.load.image('16', 'assets/Potassium.png');
                 this.game.load.spritesheet('playbutton', 'assets/startbutton.png');
                 this.game.load.spritesheet('infobutton', 'assets/infobutton.png');
                 this.game.load.spritesheet('selectbutton', 'assets/selectbutton.png');

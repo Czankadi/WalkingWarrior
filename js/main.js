@@ -26,6 +26,8 @@ Main.prototype = {
                         '12', //bwhiteblood
                         '13', // nomatch
                         '14', // nomove
+                        '15', // magnesium
+                        '16', // potassium
 			
 		];
 
@@ -33,13 +35,14 @@ Main.prototype = {
                 s=1;
                 replays = -1;
 		me.score = 0;
-                me.moves = 2000;
+                me.moves = 999;
                 me.replays = 3;
                 me.wasmove = false;
                 me.firsttime = true;
                 me.switches= false;
                 me.delete =false;
                 me.count= 0;
+                me.lort =false;
 		//Keep track of the tiles the user is trying to swap (if any)
 		me.activeTile1 = null;
 		me.activeTile2 = null;
@@ -95,7 +98,7 @@ Main.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=60){ 
+                 if (me.score>=6000){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -171,10 +174,69 @@ Main.prototype = {
                                          me.createDelete();
                                         me.moves -=2;
                                         me.movesLabel.text = me.moves;
-                                        me.checkMatch();
+                                        
                                         me.resetTile();
                                         me.fillTile(0);
+                                         me.resetTile();
+                                         var once=0;
+                                      var refreshIntervalId = setInterval(function() {
+                                       me.checkMatch();
+                                       if (once ==1){
+                                           clearInterval(refreshIntervalId);
+                                       }
+                                       once+=1;
+                                      },300) 
+                                      
+                                      
                     }
+                     if(me.activeTile1!=null){
+                    if (me.activeTile1.tileType ==16){ //potassium part
+                        var tilePos = me.getTilePos(me.tileGrid, me.activeTile1);
+                        for (var i = 0; i < me.tileGrid.length; i++){
+                            var tile = me.tileGrid[i][tilePos.y];
+                            me.tiles.remove(tile);
+                            if(tilePos.x != -1 && tilePos.y != -1){
+					me.tileGrid[i][tilePos.y] = null;
+                                    }
+                                    
+                        }
+                        me.resetTile();
+                        me.fillTile(0);
+                         var once=0;
+                                                  var refreshIntervalId = setInterval(function() {
+                                       me.checkMatch();
+                                       if (once ==1){
+                                           clearInterval(refreshIntervalId);
+                                       }
+                                       once+=1;
+                                      },300) 
+                         me.tileUp();
+                    }
+                }
+                    if(me.activeTile1!=null){
+                       if (me.activeTile1.tileType ==15){ //magnesium part
+                        var tilePos = me.getTilePos(me.tileGrid, me.activeTile1);
+                        for (var j = 0; j < me.tileGrid[0].length; j++){
+                            var tile = me.tileGrid[tilePos.x][j];
+                            me.tiles.remove(tile);
+                            if(tilePos.x != -1 && tilePos.y != -1){
+					me.tileGrid[tilePos.x][j] = null;
+                                    }
+                                    
+                        }
+                        me.resetTile();
+                        me.fillTile(0);
+                         var once=0;
+                                                  var refreshIntervalId = setInterval(function() {
+                                       me.checkMatch();
+                                       if (once ==1){
+                                           clearInterval(refreshIntervalId);
+                                       }
+                                       once+=1;
+                                      },300) 
+                         me.tileUp();
+                    }
+                }
 			//Get the location of where the pointer is currently
 			var hoverX = me.game.input.x;
 			var hoverY = me.game.input.y;
@@ -212,7 +274,7 @@ Main.prototype = {
 			}
 
 		}
-
+ 
 	},
 
 	//We don't actuall use this function, but it can trigger the game over state
@@ -256,7 +318,7 @@ Main.prototype = {
 		//Choose a random tile to add
 		if (type ==0){
                  if (me.count!=10){     
-		var tileToAdd = me.tileTypes[me.random.integerInRange(0, me.tileTypes.length - 9)];
+		var tileToAdd = me.tileTypes[me.random.integerInRange(0, 5)];
                 me.count+=1;
                 
             }    
@@ -295,6 +357,15 @@ Main.prototype = {
                 if (type ==12){
                     console.log("12esvolt");
 		var tileToAdd = me.tileTypes[11];              
+		}
+                 if (type ==15){
+                    console.log("15esvolt");
+		var tileToAdd = me.tileTypes[14];
+               
+		}
+                 if (type ==16){
+                    console.log("16esvolt");
+		var tileToAdd = me.tileTypes[15];              
 		}
 		
 		
@@ -346,7 +417,7 @@ Main.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 60 points";
+                me.text3Label.text="Reach 2000 points";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -425,7 +496,7 @@ Main.prototype = {
 			
 			//Fill the board with new tiles wherever there is an empty spot
 			me.fillTile(matches.length);
-
+                        me.fillTile(matches.length);
 			//Trigger the tileUp event to reset the active tiles
 			me.game.time.events.add(300, function(){
 				me.tileUp();
@@ -441,7 +512,7 @@ Main.prototype = {
 		else {
 
 			//No match so just swap the tiles back to their original position and reset
-                         if (me.switches==false){
+                         if (me.switches==false && me.lort==false){
                                             
                                         
 			me.swapTiles();
@@ -464,6 +535,20 @@ Main.prototype = {
                                             me.createSwitch();
                                             me.tileUp();
                                         }
+                           if (me.lort==true){
+                              
+                                            me.moves +=3;
+                                            me.score+=15;
+                                    
+                                   
+                                    me.scoreLabel.text="Score : " +me.score
+                                            me.lort= false;
+                                            me.movesLabel.text = me.moves;
+                                            me.canMove = true;
+                                            
+                                            
+                                            me.tileUp();
+                                        }              
 		}
                 
 	},
@@ -472,80 +557,522 @@ Main.prototype = {
 
 		var matches = [];
 		var groups = [];
-                
+                var me = this;
                 //L part starting
-                for (var i = 0; i < tileGrid.length-2; i++)
-		{
-			var tempArr = tileGrid[i];
-			groups = [];
-			for (var j = 0; j < tempArr.length; j++)
-			{
-                            //L part
-                            
-                           if(j < tempArr.length - 2)
-					if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+2][j+2]!== 'undefined'  )
-					{
-						if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+2][j+2].tileType) )
-						{
-                                                    console.log("That was an L");
-                                                    break;
-                                                }
-                                        } 
-                                        if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i-2][j+2] !== 'undefined'){
-                                            
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-2][j+2].tileType) )
-						{
-                                                    console.log("That was also an L upside");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+2][j]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+2][j].tileType) )
-						{
-                                                    console.log("That was   an L upside too");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i-2][j]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-2][j].tileType) )
-						{
-                                                    console.log("That was a an L aswell");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+2][j+1]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j+1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+2][j+1].tileType) )
-						{
-                                                    console.log("That was a T");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' && typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i-2][j+1]!== 'undefined'  ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j+1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-2][j+1].tileType) )
-						{
-                                                    console.log("That was a  T aswell");
-                                                    break;
-                                                }
-                                            }
-                                            if ( typeof tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+1][j]!== 'undefined' &&  typeof tileGrid[i-1][j]!== 'undefined' ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j].tileType) )
-						{
-                                                    console.log("That was a  T aswell");
-                                                    break;
-                                                }
-                                            }
-                                            if ( tileGrid[i][j]!== 'undefined' &&  typeof tileGrid[i][j + 1]!== 'undefined' &&  typeof tileGrid[i][j + 2]!== 'undefined' &&  typeof tileGrid[i+1][j+2]!== 'undefined'  && typeof tileGrid[i-1][j+2]!== 'undefined' ){
-                                                if (Number(tileGrid[i][j].tileType)!=12 && Number(tileGrid[i][j].tileType)!=13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+1].tileType)&& Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i-1][j+2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i+1][j+2].tileType) )
-						{
-                                                    console.log("That was a  T aswell");
-                                                    break;
-                                                }
-                                                
-                                            }
-                                        }
+        for (var i = 0; i < tileGrid.length; i++)
+        {
+            var tempArr = tileGrid[i];
+            groups = [];
+            for (var j = 0; j < tempArr.length; j++)
+            {
+                //L part
+                if (i < tileGrid.length - 2) {
+                    if (j < tempArr.length - 2)
+                        if (typeof tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i + 2][j + 2] !== 'undefined')
+                        {
+                            if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 1][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 2][j + 2].tileType))
+                            {
+                                me.lort = true;
+                                me.tiles.remove(me.tileGrid[i][j]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i][j + 1]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i + 1][j + 2]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 1][j + 2]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i + 2][j + 2]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 2][j + 2]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i][j + 2]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                var tile2 = me.addTile(tilePos.x, tilePos.y, 15);
+                                me.tileGrid[i][j + 2] = tile2;
+
+                                me.resetTile();
+                                me.fillTile(0);
+                                me.resetTile();
+                                var once = 0;
+                                var refreshIntervalId = setInterval(function () {
+                                    me.checkMatch();
+                                    me.resetTile();
+                                me.fillTile(0);
+                                    if (once == 1) {
+                                        console.log("once");
+                                        clearInterval(refreshIntervalId);
                                     }
+                                    once += 1;
+                                }, 400)
+                                console.log("That was an L");
+                                break;
+                            }
+                        }
+                }
+                if (i >= 2) {
+                    if (typeof tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i - 2][j + 2] !== 'undefined') {
+
+                        if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 1][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 2][j + 2].tileType))
+                        {
+                            me.lort = true;
+                            me.tiles.remove(me.tileGrid[i][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i - 1][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 1][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i - 2][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 2][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            var tile2 = me.addTile(tilePos.x, tilePos.y, 15);
+                            me.tileGrid[i][j + 2] = tile2;
+
+                            me.resetTile();
+                            me.fillTile(0);
+                            me.resetTile();
+                            var once = 0;
+                            var refreshIntervalId = setInterval(function () {
+                                me.checkMatch();
+                                me.resetTile();
+                                me.fillTile(0);
+                                console.log("once");
+                                if (once == 1) {
+                                    clearInterval(refreshIntervalId);
+                                }
+
+                                once += 1;
+                            }, 400)
+                            console.log("That was an L2");
+                            break;
+                        }
+                    }
+                }
+                if (i < tileGrid.length - 2) {
+                    if (typeof tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i + 2][j] !== 'undefined') {
+                        if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 2][j].tileType))
+                        {
+                            me.lort = true;
+                            me.tiles.remove(me.tileGrid[i][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i + 1][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 1][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i + 2][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 2][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            var tile2 = me.addTile(tilePos.x, tilePos.y, 15);
+                            me.tileGrid[i][j + 2] = tile2;
+                            me.resetTile();
+                            me.fillTile(0);
+                            me.resetTile();
+                            var once = 0;
+                            var refreshIntervalId = setInterval(function () {
+                                me.checkMatch();
+                                me.resetTile();
+                                me.fillTile(0);
+                                console.log("once");
+                                if (once == 1) {
+                                    clearInterval(refreshIntervalId);
+                                }
+                                once += 1;
+                            }, 400)
+                            console.log("That was an L3");
+                            break;
+                        }
+                    }
+                }
+                if (i >= 2) {
+                    if (typeof tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i - 2][j] !== 'undefined') {
+                        if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 2][j].tileType))
+                        {
+                            me.lort = true;
+                            me.tiles.remove(me.tileGrid[i][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i - 1][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 1][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i - 2][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 2][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            var tile2 = me.addTile(tilePos.x, tilePos.y, 15);
+                            me.tileGrid[i][j + 2] = tile2;
+
+                            me.resetTile();
+                            me.fillTile(0);
+                            me.resetTile();
+                            var once = 0;
+                            var refreshIntervalId = setInterval(function () {
+                                me.checkMatch();
+                                me.resetTile();
+                                me.fillTile(0);
+                                console.log("once");
+                                if (once == 1) {
+                                    clearInterval(refreshIntervalId);
+                                }
+                                once += 1;
+                            }, 400)
+                            console.log("That was an L4");
+                            break;
+                        }
+                    }
+                }
+                if (i < tileGrid.length - 2) {
+                    if (typeof tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i + 2][j + 1] !== 'undefined') {
+                        if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 1][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 2][j + 1].tileType))
+                        {
+                            me.lort = true;
+                            me.tiles.remove(me.tileGrid[i][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i + 1][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 1][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i + 2][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 2][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            var tile2 = me.addTile(tilePos.x, tilePos.y, 16);
+                            me.tileGrid[i][j + 2] = tile2;
+
+                            me.resetTile();
+                            me.fillTile(0);
+                            me.resetTile();
+                            var once = 0;
+                            var refreshIntervalId = setInterval(function () {
+                                me.checkMatch();
+                                me.resetTile();
+                                me.fillTile(0);
+                                console.log("once");
+                                if (once == 1) {
+                                    clearInterval(refreshIntervalId);
+                                }
+                                once += 1;
+                            }, 400)
+                            console.log("That was a T");
+                            break;
+                        }
+                    }
+                }
+                if (i >= 2) {
+                    if (typeof tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i - 2][j + 1] !== 'undefined') {
+                        if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 1][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 2][j + 1].tileType))
+                        {
+                            me.lort = true;
+                            me.tiles.remove(me.tileGrid[i][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i - 1][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 1][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i - 2][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 2][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            var tile2 = me.addTile(tilePos.x, tilePos.y, 16);
+                            me.tileGrid[i][j + 2] = tile2;
+
+                            me.resetTile();
+                            me.fillTile(0);
+                            me.resetTile();
+                            var once = 0;
+                            var refreshIntervalId = setInterval(function () {
+                                me.checkMatch();
+                                me.resetTile();
+                                me.fillTile(0);
+                                console.log("once");
+                                if (once == 1) {
+                                    clearInterval(refreshIntervalId);
+                                }
+                                once += 1;
+                            }, 400)
+                            console.log("That was a T1");
+                            break;
+                        }
+                    }
+                }
+                if (i < tileGrid.length - 1) {
+                    if (i >= 1) {
+                        if (typeof tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i + 1][j] !== 'undefined' && typeof tileGrid[i - 1][j] !== 'undefined') {
+                            if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 1][j].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 1][j].tileType))
+                            {
+                                me.lort = true;
+                                me.tiles.remove(me.tileGrid[i][j]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i][j + 1]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i + 1][j]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 1][j]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i - 1][j]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 1][j]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                me.tiles.remove(me.tileGrid[i][j + 2]);
+                                var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                                //Remove the tile from the theoretical grid
+                                if (tilePos.x != -1 && tilePos.y != -1) {
+                                    me.tileGrid[tilePos.x][tilePos.y] = null;
+                                }
+                                var tile2 = me.addTile(tilePos.x, tilePos.y, 16);
+                                me.tileGrid[i][j + 2] = tile2;
+
+                                me.resetTile();
+                                me.fillTile(0);
+                                me.resetTile();
+                                console.log("once");
+                                var once = 0;
+                                var refreshIntervalId = setInterval(function () {
+                                    me.checkMatch();
+                                    me.resetTile();
+                                me.fillTile(0);
+                                    if (once == 1) {
+                                        clearInterval(refreshIntervalId);
+                                    }
+                                    once += 1;
+                                }, 400)
+                                console.log("That was a T2");
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (i >= 1 && i < tileGrid.length - 1) {
+                    if (tileGrid[i][j] !== 'undefined' && typeof tileGrid[i][j + 1] !== 'undefined' && typeof tileGrid[i][j + 2] !== 'undefined' && typeof tileGrid[i + 1][j + 2] !== 'undefined' && typeof tileGrid[i - 1][j + 2] !== 'undefined') {
+                        if (Number(tileGrid[i][j].tileType) != 12 && Number(tileGrid[i][j].tileType) != 13 && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 1].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i - 1][j + 2].tileType) && Number(tileGrid[i][j].tileType) == Number(tileGrid[i + 1][j + 2].tileType))
+                        {
+                            me.lort = true;
+                            me.tiles.remove(me.tileGrid[i][j]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 1]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 1]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i + 1][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i + 1][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i - 1][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i - 1][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            me.tiles.remove(me.tileGrid[i][j + 2]);
+                            var tilePos = me.getTilePos(me.tileGrid, me.tileGrid[i][j + 2]);
+
+                            //Remove the tile from the theoretical grid
+                            if (tilePos.x != -1 && tilePos.y != -1) {
+                                me.tileGrid[tilePos.x][tilePos.y] = null;
+                            }
+                            var tile2 = me.addTile(tilePos.x, tilePos.y, 16);
+                            me.tileGrid[i][j + 2] = tile2;
+
+                            me.resetTile();
+                            me.fillTile(0);
+                            me.resetTile();
+                            var once = 0;
+                            var refreshIntervalId = setInterval(function () {
+                                me.checkMatch();
+                                me.resetTile();
+                                me.fillTile(0);
+                                 console.log("once");
+                                if (once == 1) {
+                                    clearInterval(refreshIntervalId);
+                                }
+                                once += 1;
+                            }, 400)
+                            console.log("That was a T3");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
                             //L part ending
-                
+           if (me.lort ==true){
+               return matches;
+           }     
 
 		//Check for horizontal matches
 		for (var i = 0; i < tileGrid.length; i++)
@@ -641,7 +1168,7 @@ Main.prototype = {
 		//Loop through all the matches and remove the associated tiles
 		for(var i = 0; i < matches.length; i++){
 			var tempArr = matches[i];
-                          if (tempArr.length > 3) { //bonustile part
+                          if (tempArr.length == 4) { //bonustile part
             var ax=-1;
             var ay=-1;
             var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);
@@ -700,6 +1227,68 @@ Main.prototype = {
                 me.resetTile();
             }
             }
+            
+            
+            if (tempArr.length == 5) { // 5 bonustile part
+            var ax=-1;
+            var ay=-1;
+            var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);
+            var atilePos2 = me.getTilePos(me.tileGrid, me.activeTile2);
+            console.log(atilePos1.x +" 1x " + atilePos1.y +" 1y " + atilePos2.x +" 2x " + atilePos2.y+ " 2y ");
+            for (var k = 0; k <=Number( tempArr.length)-1; k++){
+                var tile3 = tempArr[k];
+                var tile4 = tempArr[k+1];
+                var tilePos3 = me.getTilePos(me.tileGrid, tile3);
+                var tilePos4 = me.getTilePos(me.tileGrid, tile4);
+                console.log(k+" "+tilePos3.x +" kx " + tilePos3.y +" ky ");
+                
+                if (Number(tilePos3.y)== Number(tilePos4.y)&& Number(tilePos3.x)==Number(atilePos1.x) && Number(tilePos3.y)==Number(atilePos1.y)){
+                    ax=atilePos1.x;
+                    ay=atilePos1.y;
+                }
+                if (Number(tilePos3.y)== Number(tilePos4.y)&& Number(tilePos3.x)==Number(atilePos2.x) && Number(tilePos3.y)==Number(atilePos2.y)){
+                    ax=atilePos2.x;
+                    ay=atilePos2.y; 
+                }
+            }
+                console.log("ax");
+                console.log(ax);
+                console.log("ay");
+                console.log(ax);
+                
+                var type = 0;
+                if (tempArr[0].tileType == 1) {
+                    type=7;
+                }
+                if (tempArr[0].tileType == 2) {
+                    type=8;
+                }
+                if (tempArr[0].tileType == 3) {
+                    type=9;
+                }
+                if (tempArr[0].tileType == 4) {
+                    type=10;
+                }
+                if (tempArr[0].tileType == 5) {
+                    type=11;
+                }
+                if (tempArr[0].tileType == 6) {
+                    type=12;
+                }
+                if (ax!=-1 && ay!=-1){
+                var tile2 = me.addTile(ax, ay, type);
+                me.tileGrid[ax][ay] = tile2;
+            }
+            if (ax==-1 && ay==-1){
+                  var tile = tempArr[4];
+                       
+                            var tilePos = me.getTilePos(me.tileGrid, tile);
+            var tile2 = me.addTile(tilePos.x, tilePos.y, type);
+                me.tileGrid[tilePos.x][tilePos.y] = tile2;
+                me.resetTile();
+            }
+            }
+            
                         var tile = tempArr[0];
                        
                             var tilePos = me.getTilePos(me.tileGrid, tile);
@@ -793,7 +1382,7 @@ Main.prototype = {
 		//Check for blank spaces in the grid and add new tiles at that position
 		for(var i = 0; i < me.tileGrid.length; i++){
 
-			for(var j = 0; j < me.tileGrid.length; j++){
+			for(var j = 0; j < me.tileGrid[0].length; j++){
 
 				if (me.tileGrid[i][j] == null)
 				{
