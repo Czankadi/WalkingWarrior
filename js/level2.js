@@ -33,8 +33,8 @@ Level2.prototype = {
                 s=2;
                 
 		me.score = 0;
-                me.moves = 2000;
-                me.replays = replays;
+                me.moves = 30;
+                me.replays = 3;
                 me.wasmove = false;
                 me.firsttime = true;
                 me.switches= false;
@@ -42,6 +42,7 @@ Level2.prototype = {
                 me.count= 0;
                 me.bonus= 0;
                 me.extratime=0;
+                me.bonustiles=0;
 		//Keep track of the tiles the user is trying to swap (if any)
 		me.activeTile1 = null;
 		me.activeTile2 = null;
@@ -97,7 +98,7 @@ Level2.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=60){ 
+                 if (me.bonustiles>=2){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -348,7 +349,7 @@ Level2.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 60 points";
+                me.text3Label.text="Make 2 bonustiles  "+me.bonustiles+"/2";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -569,6 +570,7 @@ Level2.prototype = {
 		for(var i = 0; i < matches.length; i++){
 			var tempArr = matches[i];
                           if (tempArr.length > 3) { //bonustile part
+                              me.bonustiles+=1;
             var ax=-1;
             var ay=-1;
             var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);
@@ -755,32 +757,12 @@ Level2.prototype = {
                 var textFont = "36px Arial";
                  var tFont = "80px Arial";
                 me.textLabel = me.game.add.text(1230, 80, "0", {font: textFont, fill: "#fff"}); 
-                me.textLabel.text ="Time left:"; 
+                me.textLabel.text ="Moves left:"; 
 		me.movesLabel = me.game.add.text(1230, 120, "0", {font: scoreFont, fill: "#fff"}); 
 		me.movesLabel.anchor.setTo(0, 0);
 		me.movesLabel.align = 'center';
-                var start = Date.now();
-                var refreshIntervalId = setInterval(function() {
-                 delta = Date.now() - start; 
-                 // in seconds
-                // alternatively just show wall clock time:
-                me.movesLabel.text =60+me.extratime-Math.floor(delta / 1000);
-                me.resetTile();
-                if((50+me.extratime-Math.floor(delta / 1000))<-10){
-                   me.replays-=1;
-                   replays=me.replays;
-                   console.log(replays+" here");
-                   clearInterval(refreshIntervalId);
-                   if(me.replays==0){
-                       clearInterval(refreshIntervalId);
-                     this.game.state.start("GameOver");   
-                   }
-                   if(me.replays!=0){
-                       clearInterval(refreshIntervalId);
-                   this.game.state.start("Level2");
-               }
-                }
-                }, 1000); 
+                me.movesLabel.text =me.moves; 
+                
                 
                 
                 me.text3Label = me.game.add.text(20, 1800, "", {font: tFont, fill: "#fff"}); 
@@ -859,7 +841,7 @@ Level2.prototype = {
         incrementMoves: function(){
                 var me = this;
 		me.moves-=1;
-            
+            me.movesLabel.text = me.moves;
 		
            },
             incrementPlays: function(){
