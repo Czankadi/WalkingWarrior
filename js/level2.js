@@ -85,8 +85,8 @@ Level2.prototype = {
 		me.createScore();
                 me.createMoves();
                 me.createReplays();
-                me.createSwitch();
-                me.createDelete();
+              //  me.createSwitch();
+              //  me.createDelete();
                 
 	},
  
@@ -149,7 +149,7 @@ Level2.prototype = {
                     me.firsttime = true;
                     
                     me.initTiles();
-                    me.moves = 10; 
+                    me.moves = 30; 
                     
                      me.score = 0;
                      me.scoreLabel.text= "Score: " +me.score;

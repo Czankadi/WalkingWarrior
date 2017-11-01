@@ -29,7 +29,49 @@ NextLevel.prototype = {
 		this.game.state.start("Level2");
             }
             if (s==2){
-                this.game.state.start("Level2");
+                this.game.state.start("Level3");
+            }
+            if (s==3){
+                this.game.state.start("Level4");
+            }
+            if (s==4){
+                this.game.state.start("Level5");
+            }
+            if (s==5){
+                this.game.state.start("Level6");
+            }
+            if (s==6){
+                this.game.state.start("Level7");
+            }
+            if (s==7){
+                this.game.state.start("Level8");
+            }
+            if (s==8){
+                this.game.state.start("Level9");
+            }
+            if (s==9){
+                this.game.state.start("Level10");
+            }
+            if (s==10){
+                this.game.state.start("Level11");
+            }
+            if (s==11){
+                this.game.state.start("Level11");
+            }
+             if (s==12){
+                this.game.state.start("Level12");
+            }
+             if (s==13){
+                this.game.state.start("Level13");
+            }
+             if (s==14){
+                this.game.state.start("Level14");
+            }
+             if (s==15){
+                this.game.state.start("Level15");
+            }
+             if (s==16){
+                this.game.state.start("Level16");
             }
 	}
 	

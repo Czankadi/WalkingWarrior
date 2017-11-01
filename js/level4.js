@@ -1,8 +1,8 @@
-var Main = function(game){
+var Level4 = function(game){
 
 };
 
-Main.prototype = {
+Level4.prototype = {
 
 	create: function() {
 
@@ -32,11 +32,11 @@ Main.prototype = {
 		];
 
 		//Keep track of the users score
-                s=1;
-                replays = -1;
+                s=4;
+                replays = 3;
 		me.score = 0;
-                me.moves = 999;
-                me.replays = 3;
+                me.moves = 30;
+                me.replays = replays;
                 me.wasmove = false;
                 me.firsttime = true;
                 me.switches= false;
@@ -85,8 +85,8 @@ Main.prototype = {
 		me.createScore();
                 me.createMoves();
                 me.createReplays();
-                me.createSwitch();
-                me.createDelete();
+              //  me.createSwitch();
+              //  me.createDelete();
                 
 	},
  
@@ -98,7 +98,7 @@ Main.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=6000){ 
+                 if (me.score>=60){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -149,7 +149,7 @@ Main.prototype = {
                     me.firsttime = true;
                     
                     me.initTiles();
-                    me.moves = 10; 
+                    me.moves = 30; 
                     me.movesLabel.text = me.moves;
                      me.score = 0;
                      me.scoreLabel.text= "Score: " +me.score;
@@ -317,21 +317,21 @@ Main.prototype = {
 
 		//Choose a random tile to add
 		if (type ==0){
-                 if (me.count!=10){     
+                     
 		var tileToAdd = me.tileTypes[me.random.integerInRange(0, 5)];
-                me.count+=1;
                 
-            }    
+                
+              
                     
-                    if (me.count==10){
-                        var tileToAdd = me.tileTypes[12];
-                        me.count+=1;
-                        
-                    }
-                    if (me.count==20){
-                        var tileToAdd = me.tileTypes[13];
-                        me.count=0;               
-                    }
+//                    if (me.count==10){
+//                        var tileToAdd = me.tileTypes[12];
+//                        me.count+=1;
+//                        
+//                    }
+//                    if (me.count==20){
+//                        var tileToAdd = me.tileTypes[13];
+//                        me.count=0;               
+//                    }
               
 		}
 		if (type ==7){
@@ -417,7 +417,7 @@ Main.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 2000 points";
+                me.text3Label.text="Reach 60 points";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -539,7 +539,7 @@ Main.prototype = {
                               
                                             me.moves +=3;
                                             me.score+=15;
-                                    
+                                    //this.game.state.start("NextLevel");
                                    
                                     me.scoreLabel.text="Score : " +me.score
                                             me.lort= false;

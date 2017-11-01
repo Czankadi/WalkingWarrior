@@ -1,8 +1,8 @@
-var Main = function(game){
+var Level16 = function(game){
 
 };
 
-Main.prototype = {
+Level16.prototype = {
 
 	create: function() {
 
@@ -32,10 +32,10 @@ Main.prototype = {
 		];
 
 		//Keep track of the users score
-                s=1;
+                s=16;
                 replays = -1;
 		me.score = 0;
-                me.moves = 999;
+                me.moves = 40;
                 me.replays = 3;
                 me.wasmove = false;
                 me.firsttime = true;
@@ -87,6 +87,7 @@ Main.prototype = {
                 me.createReplays();
                 me.createSwitch();
                 me.createDelete();
+                me.text3Label.text="Match 2 neighbouring bonustiles";
                 
 	},
  
@@ -149,7 +150,7 @@ Main.prototype = {
                     me.firsttime = true;
                     
                     me.initTiles();
-                    me.moves = 10; 
+                    me.moves = 40; 
                     me.movesLabel.text = me.moves;
                      me.score = 0;
                      me.scoreLabel.text= "Score: " +me.score;
@@ -417,7 +418,7 @@ Main.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 2000 points";
+                me.text3Label.text="Match 2 neighbouring bonustiles";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -453,6 +454,7 @@ Main.prototype = {
                                     me.moves+=3;
                                     me.movesLabel.text=me.moves;
                                     me.scoreLabel.text="Score : " +me.score;
+                                    this.game.state.start("NextLevel"); 
                                     return;
                     }
 
@@ -1348,7 +1350,7 @@ Main.prototype = {
 		var me = this;
 		var scoreFont = "100px Arial";
                 var textFont = "36px Arial";
-                 var tFont = "80px Arial";
+                 var tFont = "64px Arial";
                 me.textLabel = me.game.add.text(1230, 80, "0", {font: textFont, fill: "#fff"}); 
                 me.textLabel.text ="Moves left:"; 
 		me.movesLabel = me.game.add.text(1230, 120, "0", {font: scoreFont, fill: "#fff"}); 

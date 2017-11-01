@@ -21,7 +21,7 @@ GameTitle.prototype = {
 //    button.onInputOut.add(out, this);
 //    button.onInputUp.add(up, this);
     function actionOnClick () {
-
+        title.destroy();
     me.startGame();
 
 }

@@ -1,8 +1,8 @@
-var Main = function(game){
+var Level13 = function(game){
 
 };
 
-Main.prototype = {
+Level13.prototype = {
 
 	create: function() {
 
@@ -32,16 +32,18 @@ Main.prototype = {
 		];
 
 		//Keep track of the users score
-                s=1;
-                replays = -1;
+                s=13;
+               // replays = 3;
 		me.score = 0;
-                me.moves = 999;
-                me.replays = 3;
+                me.moves = 30;
+                me.replays = replays;
                 me.wasmove = false;
                 me.firsttime = true;
                 me.switches= false;
                 me.delete =false;
                 me.count= 0;
+                me.fourcount=0;
+                me.fivecount=0;
                 me.lort =false;
 		//Keep track of the tiles the user is trying to swap (if any)
 		me.activeTile1 = null;
@@ -71,6 +73,15 @@ Main.prototype = {
 		];
 
 		//Create a random data generator to use later
+                smallfive= game.add.button(270, 1800,'5', actionOnClic, this, 2, 1, 0);
+                smallfive.scale.setTo(0.45,0.45);
+                smallsix= game.add.button(580, 1800,'6', actionOnClic, this, 2, 1, 0);
+                smallsix.scale.setTo(0.45,0.45);
+                 function actionOnClic () {
+
+  
+
+}
 		var seed = Date.now();
 		me.random = new Phaser.RandomDataGenerator([seed]);
                            
@@ -85,8 +96,9 @@ Main.prototype = {
 		me.createScore();
                 me.createMoves();
                 me.createReplays();
-                me.createSwitch();
+               me.createSwitch();
                 me.createDelete();
+              me.text3Label.text="Match      "+ me.fourcount+"/20       "+ me.fivecount+"/20";
                 
 	},
  
@@ -98,7 +110,7 @@ Main.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=6000){ 
+                 if (me.fourcount>=20 && me.fivecount>=20){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -149,7 +161,7 @@ Main.prototype = {
                     me.firsttime = true;
                     
                     me.initTiles();
-                    me.moves = 10; 
+                    me.moves = 30; 
                     me.movesLabel.text = me.moves;
                      me.score = 0;
                      me.scoreLabel.text= "Score: " +me.score;
@@ -317,21 +329,21 @@ Main.prototype = {
 
 		//Choose a random tile to add
 		if (type ==0){
-                 if (me.count!=10){     
+                     
 		var tileToAdd = me.tileTypes[me.random.integerInRange(0, 5)];
-                me.count+=1;
                 
-            }    
+                
+              
                     
-                    if (me.count==10){
-                        var tileToAdd = me.tileTypes[12];
-                        me.count+=1;
-                        
-                    }
-                    if (me.count==20){
-                        var tileToAdd = me.tileTypes[13];
-                        me.count=0;               
-                    }
+//                    if (me.count==10){
+//                        var tileToAdd = me.tileTypes[12];
+//                        me.count+=1;
+//                        
+//                    }
+//                    if (me.count==20){
+//                        var tileToAdd = me.tileTypes[13];
+//                        me.count=0;               
+//                    }
               
 		}
 		if (type ==7){
@@ -417,7 +429,7 @@ Main.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 2000 points";
+                me.text3Label.text="Match      "+ me.fourcount+"/20       "+ me.fivecount+"/20";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -539,7 +551,7 @@ Main.prototype = {
                               
                                             me.moves +=3;
                                             me.score+=15;
-                                    
+                                    //this.game.state.start("NextLevel");
                                    
                                     me.scoreLabel.text="Score : " +me.score
                                             me.lort= false;
@@ -1139,12 +1151,15 @@ Main.prototype = {
                     type=9;
                 }
                 if (tempArr[0].tileType == 4) {
+                    
                     type=10;
                 }
                 if (tempArr[0].tileType == 5) {
+                    me.fourcount++;
                     type=11;
                 }
                 if (tempArr[0].tileType == 6) {
+                    me.fivecount++;
                     type=12;
                 }
                 if (ax!=-1 && ay!=-1){
@@ -1200,12 +1215,15 @@ Main.prototype = {
                     type=9;
                 }
                 if (tempArr[0].tileType == 4) {
+                   
                     type=10;
                 }
                 if (tempArr[0].tileType == 5) {
+                     me.fourcount+=2;
                     type=11;
                 }
                 if (tempArr[0].tileType == 6) {
+                    me.fivecount+=2;
                     type=12;
                 }
                 if (ax!=-1 && ay!=-1){
@@ -1223,7 +1241,14 @@ Main.prototype = {
             }
             
                         var tile = tempArr[0];
-                       
+                   if (tempArr[0].tileType == 5) {
+                     me.fourcount+=3;
+                    
+                }
+                if (tempArr[0].tileType == 6) {
+                    me.fivecount+=3;
+                    
+                }
                             var tilePos = me.getTilePos(me.tileGrid, tile);
 			for(var j = 0; j < tempArr.length; j++){
 
@@ -1448,3 +1473,4 @@ Main.prototype = {
         },
         
 };
+
