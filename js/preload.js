@@ -42,6 +42,14 @@ Preload.prototype = {
                 this.game.load.spritesheet('14button', 'assets/14button.png');
                 this.game.load.spritesheet('15button', 'assets/15button.png');
                 this.game.load.spritesheet('16button', 'assets/16button.png');
+                this.game.load.spritesheet('17button', 'assets/17button.png');
+                this.game.load.spritesheet('18button', 'assets/18button.png');
+                this.game.load.spritesheet('19button', 'assets/19button.png');
+                this.game.load.spritesheet('20button', 'assets/20button.png');
+                this.game.load.spritesheet('21button', 'assets/21button.png');
+                this.game.load.spritesheet('22button', 'assets/22button.png');
+                this.game.load.spritesheet('23button', 'assets/23button.png');
+                
                 this.game.load.spritesheet('switch', 'assets/switch.png');
                 this.game.load.spritesheet('redswitch', 'assets/redswitch.png');
                 this.game.load.spritesheet('delete', 'assets/delete.png');

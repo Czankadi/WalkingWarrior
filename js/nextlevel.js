@@ -73,6 +73,28 @@ NextLevel.prototype = {
              if (s==16){
                 this.game.state.start("Level16");
             }
+             if (s==17){
+                this.game.state.start("Level17");
+            }
+            if (s==18){
+                this.game.state.start("Level18");
+            }
+            if (s==19){
+                this.game.state.start("Level19");
+            }
+             if (s==20){
+                this.game.state.start("Level20");
+            }
+             if (s==21){
+                this.game.state.start("Level21");
+            }
+             if (s==22){
+                this.game.state.start("Level22");
+            }
+             if (s==23){
+                this.game.state.start("Level23");
+            }
+
 	}
 	
 }

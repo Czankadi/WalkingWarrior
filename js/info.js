@@ -46,6 +46,20 @@ Info.prototype = {
          button15.scale.setTo(0.3,0.3);
          button16 = game.add.button(850, 960, '16button', actionOnClick19, this, 2, 1, 0);
          button16.scale.setTo(0.3,0.3);
+         button17 = game.add.button(850, 1150, '17button', actionOnClick20, this, 2, 1, 0);
+         button17.scale.setTo(0.7,0.7);
+         button18 = game.add.button(830, 1290, '18button', actionOnClick21, this, 2, 1, 0);
+         button18.scale.setTo(0.27,0.25); 
+         button19 = game.add.button(860, 1530, '19button', actionOnClick22, this, 2, 1, 0);
+         button19.scale.setTo(0.5,0.5);
+         button20 = game.add.button(850, 1700, '20button', actionOnClick23, this, 2, 1, 0);
+         button20.scale.setTo(0.23,0.23);
+         button21 = game.add.button(1180, 540, '21button', actionOnClick24, this, 2, 1, 0);
+         button21.scale.setTo(0.75,0.75);
+         button22 = game.add.button(1160, 750, '22button', actionOnClick25, this, 2, 1, 0);
+         button22.scale.setTo(1.33,1.33);
+         button23 = game.add.button(1130, 940, '23button', actionOnClick26, this, 2, 1, 0);
+         button23.scale.setTo(1.35,1.45);
 //    button.onInputOver.add(over, this);
 //    button.onInputOut.add(out, this);
 //    button.onInputUp.add(up, this);
@@ -154,6 +168,49 @@ function actionOnClick19 () {
     title.destroy();
     replays=3;
     this.game.state.start("Level16");
+        
+}
+function actionOnClick20 () {
+    title.destroy();
+    replays=3;
+    this.game.state.start("Level17");
+        
+}
+function actionOnClick21 () {
+    title.destroy();
+    replays=3;
+    this.game.state.start("Level18");
+        
+}
+function actionOnClick22 () {
+    title.destroy();
+    replays=3;
+    this.game.state.start("Level19");
+        
+}
+function actionOnClick23 () {
+    title.destroy();
+    replays=3;
+    this.game.state.start("Level20");
+        
+}
+function actionOnClick24 () {
+    title.destroy();
+    replays=3;
+    this.game.state.start("Level21");
+        
+}
+function actionOnClick25 () {
+    title.destroy();
+    replays=3;
+    this.game.state.start("Level22");
+        
+}
+
+function actionOnClick26 () {
+    title.destroy();
+    replays=3;
+    this.game.state.start("Level23");
         
 }
 
