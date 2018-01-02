@@ -6,7 +6,7 @@ Description.prototype = {
             var me =this;
              background = game.add.tileSprite(0, 0, 1400, 1920, "background");
             var text1 = "1. Create matches of 3 cells to get points";
-    var style = { font: "70px Arial", fill: "#000", align: "center" };
+    var style = { font: "70px Forte", fill: "#fcb514", align: "center" };
     var t1 = this.game.add.text(50, 80, text1, style);
     
                 var text2 = "2. Create matches of 4 cells. ";

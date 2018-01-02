@@ -1341,7 +1341,7 @@ Level5.prototype = {
 		var me = this;
 		var scoreFont = "100px Arial";
 
-		me.scoreLabel = me.game.add.text(950, 1780, "0", {font: scoreFont, fill: "#fff"}); 
+		me.scoreLabel = me.game.add.text(950, 1780, "0", {font: scoreFont, fill: "#ff2800"}); 
 		me.scoreLabel.anchor.setTo(0, 0);
 		me.scoreLabel.align = 'center';
                 me.scoreLabel.text ="Score: "+ me.score; 
@@ -1353,13 +1353,13 @@ Level5.prototype = {
 		var scoreFont = "100px Arial";
                 var textFont = "36px Arial";
                  var tFont = "80px Arial";
-                me.textLabel = me.game.add.text(1230, 80, "0", {font: textFont, fill: "#fff"}); 
+                me.textLabel = me.game.add.text(1230, 80, "0", {font: textFont, fill: "#ff2800"}); 
                 me.textLabel.text ="Moves left:"; 
-		me.movesLabel = me.game.add.text(1230, 120, "0", {font: scoreFont, fill: "#fff"}); 
+		me.movesLabel = me.game.add.text(1230, 120, "0", {font: scoreFont, fill: "#ff2800"}); 
 		me.movesLabel.anchor.setTo(0, 0);
 		me.movesLabel.align = 'center';
                 me.movesLabel.text = me.moves; 
-                me.text3Label = me.game.add.text(20, 1800, "", {font: tFont, fill: "#fff"}); 
+                me.text3Label = me.game.add.text(20, 1800, "", {font: tFont, fill: "#ff2800"}); 
 	},
         
          createReplays: function(){
@@ -1367,9 +1367,9 @@ Level5.prototype = {
 		var me = this;
 		var scoreFont = "100px Arial";
                 var textFont = "36px Arial";
-                me.text2Label = me.game.add.text(1220, 250, "0", {font: textFont, fill: "#fff"}); 
+                me.text2Label = me.game.add.text(1220, 250, "0", {font: textFont, fill: "#ff2800"}); 
                 me.text2Label.text ="Tokens left:"; 
-		me.playsLabel = me.game.add.text(1230, 290, "0", {font: scoreFont, fill: "#fff"}); 
+		me.playsLabel = me.game.add.text(1230, 290, "0", {font: scoreFont, fill: "#ff2800"}); 
 		me.playsLabel.anchor.setTo(0, 0);
 		me.playsLabel.align = 'center';
                 me.playsLabel.text = me.replays; 

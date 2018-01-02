@@ -55,6 +55,7 @@ Preload.prototype = {
                 this.game.load.spritesheet('delete', 'assets/delete.png');
                 this.game.load.spritesheet('reddelete', 'assets/reddelete.png');
                 this.game.load.image("background", "assets/background.jpg");
+                this.game.load.image("background2", "assets/background2.jpg");
                 this.game.load.audio('title', 'assets/title.mp3');
                 this.game.load.audio('game', 'assets/game.mp3');
 	},

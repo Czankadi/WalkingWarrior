@@ -9,13 +9,13 @@ GameTitle.prototype = {
                function start() {
             title.loopFull(0.8);
         }
-             background = game.add.tileSprite(0, 0, 1400, 1920, "background");
+             background = game.add.tileSprite(0, 0, 1400, 1920, "background2");
             var text = "Walking Warrior";
-             var tex3 = "v0.6";
-    var style = { font: "180px Arial", fill: "#000", align: "center" };
-    var style2 = { font: "60px Arial", fill: "#000", align: "center" };
+             var tex3 = "v0.6.5";
+    var style = { font: "180px Forte", fill: "#ffc61e", align: "center" };
+    var style2 = { font: "70px Forte", fill: "#ffc61e", align: "center" };
     var t = this.game.add.text(80, 100, text, style);
-    var t2= this.game.add.text(1250, 1840, tex3, style2); 
+    var t2= this.game.add.text(50, 1840, tex3, style2); 
     button = game.add.button(460, 350, 'playbutton', actionOnClick, this, 2, 1, 0);
    button.scale.setTo(0.91,0.91);
    
