@@ -88,7 +88,7 @@ Level10.prototype = {
                 me.createMoves();
                 me.createReplays();
                me.createSwitch();
-                me.text3Label.text="Make bonustiles(" +me.bonuscount+"/2) and L-s or T-s("+me.lortcount+"/2)";
+                me.text3Label.text="Make bonustiles(" +me.bonuscount+"/3) and L-s or T-s("+me.lortcount+"/3)";
               //  me.createDelete();
                 
 	},
@@ -101,7 +101,7 @@ Level10.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.bonuscount>=2 && me.lortcount>=2){ 
+                 if (me.bonuscount>=3 && me.lortcount>=3){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -420,7 +420,7 @@ Level10.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Make bonustiles(" +me.bonuscount+"/2) and L-s or T-s("+me.lortcount+"/2)";
+                me.text3Label.text="Make bonustiles(" +me.bonuscount+"/3) and L-s or T-s("+me.lortcount+"/3)";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove

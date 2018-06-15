@@ -5,31 +5,11 @@
         <group>
             <file>file:/D:/Munka/Project/test/js/info.js</file>
             <file>file:/D:/Munka/Project/test/js/main.js</file>
-            <file>file:/D:/Munka/Project/test/js/level20.js</file>
-            <file>file:/D:/Munka/Project/test/js/level22.js</file>
-            <file>file:/D:/Munka/Project/test/js/level5.js</file>
-            <file>file:/D:/Munka/Project/test/js/level3.js</file>
-            <file>file:/D:/Munka/Project/test/js/gametitle.js</file>
-            <file>file:/D:/Munka/Project/test/js/level7.js</file>
-            <file>file:/D:/Munka/Project/test/js/level9.js</file>
-            <file>file:/D:/Munka/Project/test/js/level11.js</file>
             <file>file:/D:/Munka/Project/test/js/level1.js</file>
-            <file>file:/D:/Munka/Project/test/js/level13.js</file>
-            <file>file:/D:/Munka/Project/test/js/level15.js</file>
-            <file>file:/D:/Munka/Project/test/js/level17.js</file>
-            <file>file:/D:/Munka/Project/test/js/level21.js</file>
-            <file>file:/D:/Munka/Project/test/js/level19.js</file>
-            <file>file:/D:/Munka/Project/test/js/level23.js</file>
-            <file>file:/D:/Munka/Project/test/js/level4.js</file>
-            <file>file:/D:/Munka/Project/test/js/level2.js</file>
-            <file>file:/D:/Munka/Project/test/js/level6.js</file>
-            <file>file:/D:/Munka/Project/test/js/level8.js</file>
-            <file>file:/D:/Munka/Project/test/js/level12.js</file>
-            <file>file:/D:/Munka/Project/test/js/level10.js</file>
-            <file>file:/D:/Munka/Project/test/js/level16.js</file>
-            <file>file:/D:/Munka/Project/test/js/level14.js</file>
-            <file>file:/D:/Munka/Project/test/index.html</file>
-            <file>file:/D:/Munka/Project/test/js/level18.js</file>
+            <file>file:/D:/Munka/Project/test/js/description.js</file>
+            <file>file:/D:/Munka/Project/test/js/gametitle.js</file>
+            <file>file:/D:/Munka/Project/test/js/boot.js</file>
+            <file>file:/D:/Munka/Project/test/js/gameover.js</file>
         </group>
     </open-files>
 </project-private>

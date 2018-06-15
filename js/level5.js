@@ -99,7 +99,7 @@ Level5.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.bonuscount>=4){ 
+                 if (me.bonuscount>=6){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -150,7 +150,7 @@ Level5.prototype = {
                     me.firsttime = true;
                     
                     me.initTiles();
-                    me.moves = 40; 
+                    me.moves = 45; 
                     me.movesLabel.text = me.moves;
                      me.score = 0;
                      me.scoreLabel.text= "Score: " +me.score;
@@ -418,7 +418,7 @@ Level5.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Make 4 bonustiles " +me.bonuscount+"/4 ";
+                me.text3Label.text="Make 6 bonustiles " +me.bonuscount+"/6 ";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -1105,7 +1105,7 @@ Level5.prototype = {
                           if (tempArr.length == 4) {
                               //bonustile part
                               me.bonuscount++;
-                              me.text3Label.text="Make 4 bonustiles " +me.bonuscount+"/4 ";
+                              me.text3Label.text="Make 6 bonustiles " +me.bonuscount+"/6 ";
             var ax=-1;
             var ay=-1;
             var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);

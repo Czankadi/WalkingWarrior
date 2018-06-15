@@ -418,7 +418,7 @@ Level6.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Make 3 L or T shape " +me.lortcount+"/3" ;
+                me.text3Label.text="Make 5 L or T shape " +me.lortcount+"/5" ;
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -541,8 +541,8 @@ Level6.prototype = {
                                             me.moves +=3;
                                             me.score+=15;
                                             me.lortcount++;
-                                            me.text3Label.text="Make 3 L or T shape " +me.lortcount+"/3" ;
-                                            if (me.lortcount>=3){
+                                            me.text3Label.text="Make 5 L or T shape " +me.lortcount+"/5" ;
+                                            if (me.lortcount>=5){
                                     this.game.state.start("NextLevel");
                                 }
                                     me.scoreLabel.text="Score : " +me.score

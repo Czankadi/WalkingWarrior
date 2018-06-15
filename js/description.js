@@ -80,7 +80,7 @@ Description.prototype = {
         button.scale.setTo(0.8,0.8);
      
     function actionOnClick2 () {
-
+        title.destroy();
     this.game.state.start("GameTitle");
 
 }

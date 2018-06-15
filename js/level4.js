@@ -98,7 +98,7 @@ Level4.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=60){ 
+                 if (me.score>=80){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -417,7 +417,7 @@ Level4.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 60 points";
+                me.text3Label.text="Reach 80 points";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove

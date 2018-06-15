@@ -35,7 +35,7 @@ Level17.prototype = {
                 s=17;
               //  replays = 3;
 		me.score = 0;
-                me.moves = 40;
+                me.moves = 50;
                 me.replays = replays;
                 me.wasmove = false;
                 me.firsttime = true;
@@ -86,7 +86,7 @@ Level17.prototype = {
                 me.createMoves();
                 me.createReplays();
                 me.createSwitch();
-                 me.text3Label.text="Reach 300 points";
+                 me.text3Label.text="Reach 400 points";
                 me.createDelete();
                 
 	},
@@ -420,7 +420,7 @@ Level17.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 300 points";
+                me.text3Label.text="Reach 400 points";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove

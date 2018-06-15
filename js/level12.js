@@ -35,7 +35,7 @@ Level12.prototype = {
                 s=12;
               //  replays = 3;
 		me.score = 0;
-                me.moves = 30;
+                me.moves = 40;
                 me.replays = replays;
                 me.wasmove = false;
                 me.firsttime = true;
@@ -86,7 +86,7 @@ Level12.prototype = {
                 me.createMoves();
                 me.createReplays();
                 me.createSwitch();
-                 me.text3Label.text="Reach 200 points";
+                 me.text3Label.text="Reach 300 points";
                 me.createDelete();
                 
 	},
@@ -99,7 +99,7 @@ Level12.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.score>=200){ 
+                 if (me.score>=300){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -418,7 +418,7 @@ Level12.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Reach 200 points";
+                me.text3Label.text="Reach 300 points";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove

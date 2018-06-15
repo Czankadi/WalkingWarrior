@@ -98,7 +98,7 @@ Level2.prototype = {
 	update: function() {
             
 		var me = this;
-                 if (me.bonustiles>=2){ 
+                 if (me.bonustiles>=3){ 
                      replays=me.replays;
                    this.game.state.start("NextLevel");  
                  }
@@ -349,7 +349,7 @@ Level2.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Make 2 bonustiles  "+me.bonustiles+"/2";
+                me.text3Label.text="Make 3 bonustiles  "+me.bonustiles+"/3";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove

@@ -7,11 +7,11 @@ GameTitle.prototype = {
                title = game.add.audio('title');
                game.sound.setDecodedCallback(title, start, this);
                function start() {
-            title.loopFull(0.8);
+            title.loopFull(0.6);
         }
-             background = game.add.tileSprite(0, 0, 1400, 1920, "background2");
+             background = game.add.tileSprite(0, 0, 1400, 1920, "background");
             var text = "Walking Warrior";
-             var tex3 = "v0.6.5";
+             var tex3 = "v0.7";
     var style = { font: "180px Forte", fill: "#ffc61e", align: "center" };
     var style2 = { font: "70px Forte", fill: "#ffc61e", align: "center" };
     var t = this.game.add.text(80, 100, text, style);

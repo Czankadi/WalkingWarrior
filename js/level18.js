@@ -88,7 +88,7 @@ Level18.prototype = {
                 me.createReplays();
                 me.createSwitch();
                 me.createDelete();
-                me.text3Label.text="Make 3 bonustiles " +me.bonuscount+"/4 "; 
+                me.text3Label.text="Make 5 bonustiles " +me.bonuscount+"/5 "; 
 	},
  
         nothing: function(){
@@ -420,7 +420,7 @@ Level18.prototype = {
 	swapTiles: function(){
 
 		var me = this;
-                me.text3Label.text="Make 3 bonustiles " +me.bonuscount+"/4 ";
+                me.text3Label.text="Make 5 bonustiles " +me.bonuscount+"/5 ";
 		//If there are two active tiles, swap their positions
 		if(me.activeTile1 && me.activeTile2){
                     if(me.activeTile1.tileType==14 ||me.activeTile2.tileType==14){ // for nomove
@@ -1107,7 +1107,7 @@ Level18.prototype = {
                           if (tempArr.length == 4) {
                               //bonustile part
                               me.bonuscount++;
-                              me.text3Label.text="Make 4 bonustiles " +me.bonuscount+"/4 ";
+                              me.text3Label.text="Make 5 bonustiles " +me.bonuscount+"/5 ";
             var ax=-1;
             var ay=-1;
             var atilePos1 = me.getTilePos(me.tileGrid, me.activeTile1);
